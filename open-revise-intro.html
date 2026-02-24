@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OpenRevise 工作/学术文档更新助手</title>
+  <style>
+    :root {
+      --bg-1: #f7f8fc;
+      --bg-2: #eef2fb;
+      --ink-1: #111827;
+      --ink-2: #334155;
+      --ink-3: #64748b;
+      --glass: rgba(255, 255, 255, 0.75);
+      --line: rgba(148, 163, 184, 0.24);
+      --shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+      --radius-xl: 24px;
+      --radius-lg: 18px;
+      --radius-md: 14px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "SF Pro Display", "SF Pro Text", "PingFang SC", "Helvetica Neue", sans-serif;
+      color: var(--ink-1);
+      background:
+        radial-gradient(1200px 500px at 10% -5%, rgba(37, 99, 235, 0.16), transparent 55%),
+        radial-gradient(1000px 420px at 100% 0%, rgba(14, 165, 233, 0.12), transparent 52%),
+        linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 100%);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    .container {
+      width: min(960px, 92vw);
+      margin: 56px auto 72px;
+      display: grid;
+      gap: 20px;
+    }
+
+    .panel {
+      background: var(--glass);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: var(--shadow);
+      padding: 30px 32px;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 14px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      color: #1d4ed8;
+      background: rgba(37, 99, 235, 0.1);
+      border: 1px solid rgba(37, 99, 235, 0.18);
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: clamp(28px, 4.4vw, 46px);
+      line-height: 1.12;
+      letter-spacing: -0.02em;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: var(--ink-2);
+      font-size: clamp(15px, 2.2vw, 19px);
+      max-width: 790px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .card {
+      padding: 18px;
+      border-radius: var(--radius-lg);
+      background: rgba(255, 255, 255, 0.82);
+      border: 1px solid var(--line);
+    }
+
+    .card h3 {
+      margin: 0 0 7px;
+      font-size: 17px;
+      letter-spacing: -0.01em;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--ink-2);
+      font-size: 14px;
+    }
+
+    .section-title {
+      margin: 0 0 12px;
+      font-size: 20px;
+      letter-spacing: -0.01em;
+    }
+
+    .steps {
+      margin: 0;
+      padding-left: 20px;
+      color: var(--ink-2);
+    }
+
+    .steps li { margin: 6px 0; }
+
+    .meta {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .chip {
+      padding: 12px 14px;
+      border-radius: var(--radius-md);
+      background: rgba(255, 255, 255, 0.84);
+      border: 1px solid var(--line);
+      font-size: 13px;
+      color: var(--ink-3);
+    }
+
+    .chip b {
+      color: var(--ink-1);
+      font-weight: 600;
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .refs {
+      margin: 10px 0 0;
+      font-size: 12px;
+      color: var(--ink-3);
+    }
+
+    .refs a {
+      color: #1d4ed8;
+      text-decoration: none;
+    }
+
+    .refs a:hover { text-decoration: underline; }
+
+    footer {
+      text-align: center;
+      color: var(--ink-3);
+      font-size: 13px;
+      margin-top: 6px;
+    }
+
+    @media (max-width: 760px) {
+      .container { margin-top: 28px; }
+      .panel { padding: 22px 18px; border-radius: 20px; }
+      .grid, .meta { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <section class="panel">
+      <span class="eyebrow">OPENREVISE</span>
+      <h1>工作 / 学术文档更新助手<br>只改有依据的内容</h1>
+      <p class="subtitle">
+        可接入的公开学术资料规模: Semantic Scholar 2.14 亿+ 论文索引 / PubMed 3655 万+ 条目 / arXiv 200 万+ 论文。
+        公开研究（636 条引用）显示：GPT-3.5 引用虚构率 55%，GPT-4 为 18%；OpenRevise 用 “每条改动写明来源 + 缺关键资料默认不改” 把风险压到可复核。
+      </p>
+    </section>
+
+    <section class="panel">
+      <h2 class="section-title">它能帮你做什么</h2>
+      <div class="grid">
+        <article class="card">
+          <h3>2 亿+ 论文可做资料</h3>
+          <p>公开数据库规模已到 2 亿+ 论文级别，你给 PDF/链接即可把它们当作更新依据。</p>
+        </article>
+        <article class="card">
+          <h3>引用虚构 55% / 18%</h3>
+          <p>公开研究（636 条引用）：GPT-3.5 虚构 55%（非虚构 45%），GPT-4 虚构 18%（非虚构 82%）；真实引用错误率 43% / 24%。</p>
+        </article>
+        <article class="card">
+          <h3>产能基准 +14% / +34%</h3>
+          <p>公开研究（5,179 名客服坐席）：引入生成式 AI 助手后，平均产能 +14%，新手/低技能群体最高 +34%。</p>
+        </article>
+        <article class="card">
+          <h3>来源绑定覆盖 100%</h3>
+          <p>仓库策略：每条改动必须写明至少 1 条来源；缺必需来源时默认不放行。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2 class="section-title">流程很简单</h2>
+      <ol class="steps">
+        <li>先定范围：这版文档要改什么、不改什么</li>
+        <li>再拆问题：把每个问答拆成可核对的小点</li>
+        <li>查资料：确认有可验证的全文资料</li>
+        <li>再动笔：只改有明确依据的部分</li>
+        <li>出结果：生成带修订痕迹的 DOCX 和来源对照表</li>
+        <li>留记录：写入本次运行清单，方便下一次对比</li>
+      </ol>
+    </section>
+
+    <section class="panel">
+      <div class="meta">
+        <div class="chip"><b>改稿质量</b>关键改动来源覆盖 100%，缺必需来源默认 0 放行</div>
+        <div class="chip"><b>团队协作</b>1 份 Word 修订稿 + 1 份来源对照，按条复核不扯皮</div>
+        <div class="chip"><b>交付可复核</b>同一份文档可回溯到每条依据，复查成本从“翻资料”变成“对照表”</div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2 class="section-title">硬指标（仓库策略）</h2>
+      <div class="meta">
+        <div class="chip"><b>100% 来源覆盖</b>每条改动必须写明来源（不写就报错）</div>
+        <div class="chip"><b>0 默认放行</b>必需来源缺失时默认停止修订（不“蒙着改”）</div>
+        <div class="chip"><b>1:1 对照复核</b>改动、原因、来源一一对应，方便走审核流程</div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2 class="section-title">Benchmark（公开数据）</h2>
+      <div class="meta">
+        <div class="chip"><b>资料规模</b>Semantic Scholar 支持搜索 2.14 亿+ 论文；PubMed 累计 36,555,430 条目；arXiv 200 万+（2022 年已达）</div>
+        <div class="chip"><b>命中率基准</b>引用“非虚构”命中率：GPT-3.5 45%，GPT-4 82%；真实引用错误率：43% / 24%；医学内容研究：仅 7% 引用“真实且准确”</div>
+        <div class="chip"><b>提效比基准</b>企业客服实验：5,179 名坐席，产能 +14%（均值），新手/低技能群体最高 +34%</div>
+      </div>
+      <p class="refs">
+        来源:
+        <a href="https://www.semanticscholar.org/about" target="_blank" rel="noreferrer">Semantic Scholar</a>,
+        <a href="https://www.nlm.nih.gov/bsd/medline_pubmed_production_stats.html" target="_blank" rel="noreferrer">NLM PubMed</a>,
+        <a href="https://news.cornell.edu/stories/2022/01/arxiv-hits-two-million-articles" target="_blank" rel="noreferrer">Cornell arXiv</a>,
+        <a href="https://www.nature.com/articles/s41598-023-41032-5" target="_blank" rel="noreferrer">Scientific Reports</a>,
+        <a href="https://doi.org/10.7759/cureus.39238" target="_blank" rel="noreferrer">Cureus</a>,
+        <a href="https://www.nber.org/papers/w31161" target="_blank" rel="noreferrer">NBER</a>.
+      </p>
+    </section>
+
+    <footer>OpenRevise · 100% 有出处 · 0 默认放行 · 1:1 可复核</footer>
+  </main>
+</body>
+</html>
