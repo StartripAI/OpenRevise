@@ -63,6 +63,16 @@ def _run(cmd: List[str]) -> int:
     return proc.returncode
 
 
+def _resolve_runtime_python(repo_root: Path) -> str:
+    env_python = os.environ.get("REVISE_RUNTIME_PYTHON")
+    if env_python:
+        return env_python
+    default_venv = repo_root / ".venv311" / "bin" / "python"
+    if default_venv.exists():
+        return str(default_venv)
+    return sys.executable
+
+
 def _acquire_single_run_lock(lock_path: Path) -> int | None:
     lock_path.parent.mkdir(parents=True, exist_ok=True)
     try:
@@ -181,6 +191,7 @@ def main() -> int:
     ensure_non_empty_marker(args.marker)
 
     repo_root = Path(__file__).resolve().parents[1]
+    runtime_python = _resolve_runtime_python(repo_root)
     scripts_dir = Path(__file__).resolve().parent
     runs_root = repo_root / "runs"
     runs_root.mkdir(parents=True, exist_ok=True)
@@ -289,7 +300,7 @@ def main() -> int:
         finished_status = "SUCCEEDED"
         source_check_rc = _run(
             [
-                sys.executable,
+                runtime_python,
                 str(scripts_dir / "check_revise_sources.py"),
                 "--config",
                 str(args.source_config),
@@ -308,7 +319,7 @@ def main() -> int:
             finished_notes = "required source gate failed"
         else:
             revise_cmd = [
-                sys.executable,
+                runtime_python,
                 str(scripts_dir / "revise_docx.py"),
                 "--input-docx",
                 str(intake_copy),
@@ -336,7 +347,7 @@ def main() -> int:
             else:
                 qmap_rc = _run(
                     [
-                        sys.executable,
+                        runtime_python,
                         str(scripts_dir / "build_q_source_map.py"),
                         "--input-docx",
                         str(revised_docx),
@@ -538,7 +549,7 @@ def main() -> int:
         if args.purge_expired:
             hk_rc = _run(
                 [
-                    sys.executable,
+                    runtime_python,
                     str(scripts_dir / "housekeeping.py"),
                     "--marker",
                     args.marker,

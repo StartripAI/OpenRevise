@@ -1,0 +1,34 @@
+{
+  "meta": {
+    "description": "Claim-level SOP gate template. Use with scripts/check_revision_sop.py",
+    "notes": [
+      "Only HIGH confidence claims are auto-revise candidates.",
+      "MEDIUM confidence claims require manual review.",
+      "LOW confidence claims are blocked."
+    ]
+  },
+  "claims": [
+    {
+      "claim_id": "Q12_CLAIM_01",
+      "original_sentence": "Original sentence from baseline document.",
+      "proposed_revision": "Revised sentence with substantive evidence-backed update.",
+      "change_intent": "data_metric_update",
+      "reason": "New verified endpoint values were published.",
+      "required_sources": [
+        "src_primary_pdf"
+      ],
+      "double_check_sources": [
+        "src_secondary_ppt"
+      ],
+      "source_ids": [
+        "src_primary_pdf",
+        "src_secondary_ppt"
+      ],
+      "source_locations": [
+        "page:7",
+        "slide:13"
+      ],
+      "evidence_convergence": "consistent"
+    }
+  ]
+}

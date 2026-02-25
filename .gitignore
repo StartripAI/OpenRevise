@@ -16,3 +16,7 @@ __pycache__/
 
 /reports/*
 !/reports/run_index.tsv
+
+# Local runtime environment
+/.venv311/
+/.runtime/

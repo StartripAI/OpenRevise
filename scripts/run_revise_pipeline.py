@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -21,6 +22,16 @@ def _run(cmd: list[str]) -> None:
     proc = subprocess.run(cmd, check=False)
     if proc.returncode != 0:
         raise SystemExit(proc.returncode)
+
+
+def _resolve_runtime_python(repo_root: Path) -> str:
+    env_python = os.environ.get("REVISE_RUNTIME_PYTHON")
+    if env_python:
+        return env_python
+    default_venv = repo_root / ".venv311" / "bin" / "python"
+    if default_venv.exists():
+        return str(default_venv)
+    return sys.executable
 
 
 def main() -> int:
@@ -97,6 +108,7 @@ def main() -> int:
         parser.error("--run-id is required when --run-dir is provided")
 
     repo_root = Path(__file__).resolve().parents[1]
+    runtime_python = _resolve_runtime_python(repo_root)
     if args.run_dir is not None:
         args.output_docx = args.output_docx or (args.run_dir / "revision" / f"revised_{args.run_id}.docx")
         args.source_report_json = args.source_report_json or (
@@ -115,7 +127,7 @@ def main() -> int:
     qmap_script = base / "build_q_source_map.py"
 
     check_cmd = [
-        sys.executable,
+        runtime_python,
         str(check_script),
         "--config",
         str(args.source_config),
@@ -134,7 +146,7 @@ def main() -> int:
         return check_proc.returncode
 
     revise_cmd = [
-        sys.executable,
+        runtime_python,
         str(revise_script),
         "--input-docx",
         str(args.input_docx),
@@ -155,7 +167,7 @@ def main() -> int:
 
     _run(
         [
-            sys.executable,
+            runtime_python,
             str(qmap_script),
             "--input-docx",
             str(args.output_docx),

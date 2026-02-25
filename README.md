@@ -1,22 +1,32 @@
-# OpenRevise for all Industry
+# Open Revise Industry
 
-"OpenRevise" updates documents from high-confidence public evidence (papers, announcements, etc.), accepts sources in any format (PDF, image, doc, link), and outputs auditable tracked changes.
+Evidence-gated revision infrastructure for high-stakes DOCX Q&A.
 
-## Target Industries and Document Types
-- Legal/Compliance: regulatory FAQs, contract Q&A, filing/review Q&A, policy interpretation notes.
-- Consulting/Enterprise: diligence FAQs, bid Q&A, management Q&A, external messaging FAQs.
-- Medical/Research: paper FAQs, reviewer response Q&A, clinical/regulatory Q&A.
-- IR/Public Affairs: earnings Q&A, risk disclosure Q&A, public response FAQs.
-- Tech/Operations: product compliance FAQs, security FAQs, SOP Q&A.
+## User-first
+For operators and content owners, the outcome is simple:
+- no speculative edits in final documents;
+- only material revisions go live (data, metrics, key terms, risk language);
+- every updated answer is source-traceable;
+- delivery remains in native `.docx` with tracked changes.
 
-Primary output format: `.docx` with tracked changes.
-Evidence inputs: verifiable fulltext from announcements, PDFs, papers, posters, and similar sources.
+## Developer-first
+For builders and integrators, the system is explicit and deterministic:
+- `Evidence Gate`: hard fail on required-source misses.
+- `MECE Decomposition`: claim/sub-question split before revision.
+- `DOCX Revision Engine`: tracked changes via `w:del` + `w:ins`.
+- `Audit Contracts`: fixed artifacts for gate report, change audit, and Q-source map.
+- `Run Governance`: isolated run directories, manifest logging, and retention controls.
 
 ## Product Boundaries
 This product intentionally does not do:
 - prose polishing;
 - cosmetic rewrites;
 - unsupported factual expansion.
+
+## North Star
+- Do not guess.
+- Evidence first, revision second.
+- If evidence is missing, explicitly write: `not available in currently verifiable fulltext`.
 
 ## What Counts as a Valid Revision
 - New data appears or existing data changes.
@@ -30,6 +40,16 @@ This product intentionally does not do:
 - Cosmetic rewriting.
 - Synonym swaps that do not change facts.
 
+## Target Industries and Document Types
+- Legal/Compliance: regulatory FAQs, contract Q&A, filing/review Q&A, policy interpretation notes.
+- Consulting/Enterprise: diligence FAQs, bid Q&A, management Q&A, external messaging FAQs.
+- Medical/Research: paper FAQs, reviewer response Q&A, clinical/regulatory Q&A.
+- IR/Public Affairs: earnings Q&A, risk disclosure Q&A, public response FAQs.
+- Tech/Operations: product compliance FAQs, security FAQs, SOP Q&A.
+
+Primary output format: `.docx` with tracked changes.
+Evidence inputs: verifiable fulltext from announcements, PDFs, papers, posters, and similar sources.
+
 ## Method (Top-down)
 1. Define problem and scope: clarify user intent, audience, time anchor, and no-change boundaries.
 2. Decompose with MECE: split each target question into mutually exclusive and collectively exhaustive sub-questions.
@@ -40,17 +60,16 @@ This product intentionally does not do:
 
 ## Quick Start
 Requirements:
-- Python 3.10+
-- `pypdf`
+- Python 3.11 runtime for full parser stack (PPT/PDF/DOCX/image OCR)
 
-Install dependency:
+One-time runtime setup (installs compatible Python + parser dependencies):
 ```bash
-python3 -m pip install pypdf
+bash scripts/setup_runtime_py311.sh
 ```
 
 Recommended entrypoint (run-scoped governance):
 ```bash
-python3 scripts/run_revise_pipeline_v2.py \
+.venv311/bin/python scripts/run_revise_pipeline_v2.py \
   --input-docx "/absolute/path/to/original.docx" \
   --patch-spec "config/revision_patch_spec_template.json"
 ```
@@ -68,11 +87,26 @@ Revision plans are supplied via JSON patch spec:
 Source gate configuration:
 - default config path: `config/revise_sources.json`
 - define at least one `required_sources` entry (empty required sources are treated as gate failure).
+- supported local source types: `local_pdf`, `local_docx`, `local_pptx`, `local_image`
+- optional source fields: `must_include_any`, `location_hints`, `extract_mode`, `ocr_mode`
+- image OCR in `ocr_mode=dual` attempts both PaddleOCR and EasyOCR (attempt trace is written to `extraction_detail`).
+
+Runtime selection:
+- pipeline scripts prefer `.venv311/bin/python` automatically when present.
+- override explicitly with env var `REVISE_RUNTIME_PYTHON=/abs/path/to/python`.
+
+SOP claim-level gate (recommended before revision):
+```bash
+.venv311/bin/python scripts/check_revision_sop.py \
+  --claim-spec "config/revision_claim_spec_template.json" \
+  --gate-report "/absolute/path/to/source_gate_report.json" \
+  --output-csv "/absolute/path/to/sop_claim_matrix.csv"
+```
 
 ## Enterprise TLS / Certificate Chain
 If your network requires enterprise root certificates, provide a CA bundle:
 ```bash
-python3 scripts/run_revise_pipeline_v2.py \
+.venv311/bin/python scripts/run_revise_pipeline_v2.py \
   --input-docx "/absolute/path/to/original.docx" \
   --ca-bundle "/absolute/path/to/corp_root_ca.pem"
 ```
@@ -100,6 +134,8 @@ Global index:
 |---|---|
 | `scripts/revise_docx.py` | Main DOCX reviser (tracked changes + footnotes) |
 | `scripts/check_revise_sources.py` | Source gate checker (required/optional checks) |
+| `scripts/evidence_extractors.py` | Multi-format local evidence extraction (PDF/DOCX/PPTX/image) |
+| `scripts/check_revision_sop.py` | Claim-level SOP gate (material + confidence checks) |
 | `scripts/run_revise_pipeline.py` | Legacy pipeline entrypoint (explicit in/out paths) |
 | `scripts/run_revise_pipeline_v2.py` | Recommended entrypoint (run_id dirs, manifests, index) |
 | `scripts/build_q_source_map.py` | Export full Q-to-source CSV |
@@ -108,6 +144,7 @@ Global index:
 | `scripts/housekeeping.py` | Hot/cold retention and cleanup |
 | `config/revise_sources.json` | Source gate rules |
 | `config/revision_patch_spec_template.json` | Generic revision patch spec template |
+| `config/revision_claim_spec_template.json` | Claim-level SOP gate template |
 | `config/source_registry.yaml` | Source registry snapshot |
 | `docs/SOP_endpoint_extraction_standard.md` | SOP baseline |
 

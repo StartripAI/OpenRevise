@@ -4,8 +4,34 @@
     "example_source_types": [
       "url_text",
       "remote_pdf",
-      "local_pdf"
-    ]
+      "local_pdf",
+      "local_docx",
+      "local_pptx",
+      "local_image"
+    ],
+    "example_optional_fields": [
+      "must_include_any",
+      "location_hints",
+      "extract_mode",
+      "ocr_mode"
+    ],
+    "example_required_source": {
+      "src_example_local_ppt": {
+        "type": "local_pptx",
+        "path": "/absolute/path/to/evidence.pptx",
+        "location_hints": [
+          "slide:13"
+        ],
+        "must_include": [
+          "median overall survival"
+        ],
+        "must_include_any": [
+          "HR = 0.82",
+          "p-value"
+        ],
+        "extract_mode": "auto"
+      }
+    }
   },
   "required_sources": {},
   "optional_sources": {}

@@ -50,6 +50,23 @@
   - one-sentence reason
 - `FAIL CONDITION`: any delivered modification without source + reason fails QC.
 
+### 4.4 Material Update Gate (Persistent)
+- `MUST`: modify only substantive updates (data/metrics, thresholds, endpoint definitions, regulatory conclusions, risk language, recommendation levels).
+- `MUST NOT`: deliver wording-only edits (synonym swaps, sentence polishing, reordering, or expansion without factual delta).
+- `MUST`: every candidate revision records a `change_intent` to justify why this is substantive.
+- `FAIL CONDITION`: wording-only edits are blocked with reason `cosmetic_rewrite_blocked`.
+
+### 4.5 Confidence Gate (Persistent)
+- Core standard: `double-check + evidence-backed + convergence`.
+- `HIGH`: at least two verifiable supporting sources are available and converge without conflict.
+- `MEDIUM`: direct evidence exists but double-check convergence is incomplete.
+- `LOW`: indirect/unstable evidence, extraction uncertainty, or unresolved conflict.
+- Release policy:
+  - `HIGH` -> eligible for automatic revise.
+  - `MEDIUM` -> manual review required.
+  - `LOW` -> blocked.
+- `FAIL CONDITION`: conflicting evidence is marked `evidence_conflict_needs_manual_review` and cannot be auto-revised.
+
 ## 5. Top-Down Execution Framework
 
 ### 5.1 Task Contract
@@ -91,6 +108,7 @@ Recommended reasons:
 - `source_unreadable_or_ocr_failed`
 - `metadata_missing`
 - `evidence_conflict_needs_manual_review`
+- `cosmetic_rewrite_blocked`
 
 Each missing entry must include target locator and attempted chain.
 
