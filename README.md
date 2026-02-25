@@ -1,4 +1,4 @@
-# Open Revise Industry
+# Open Revise -- all Industries
 
 Evidence-gated revision infrastructure for high-stakes DOCX Q&A.
 
