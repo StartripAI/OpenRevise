@@ -1,6 +1,9 @@
-# Open Revise -- all Industries
+# IdeaClaw / OpenRevise
 
-Evidence-gated revision infrastructure for high-stakes DOCX Q&A.
+> **EN:** One Sentence. Any Structured Deliverable.
+> **ZH:** 一句话核心输入，生成任意专业文本交付物。
+
+Evidence-gated generation and revision infrastructure for high-stakes text deliverables.
 
 ## User-first
 For operators and content owners, the outcome is simple:
