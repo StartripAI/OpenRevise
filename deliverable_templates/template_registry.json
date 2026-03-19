@@ -1,0 +1,707 @@
+{
+  "_meta": {
+    "description": "Maps each IdeaClaw profile to its deliverable template source",
+    "version": "1.0",
+    "total_profiles": 134,
+    "total_with_templates": 78
+  },
+  "tier1_ml": {
+    "neurips_2025": {
+      "template": "tier1_ml/neurips",
+      "format": "latex",
+      "review": "neurips",
+      "experiment": true
+    },
+    "icml_2025": {
+      "template": "tier1_ml/neurips",
+      "format": "latex",
+      "review": "neurips",
+      "experiment": true,
+      "note": "uses neurips as base, icml sty from ai-research-skills"
+    },
+    "iclr_2026": {
+      "template": "tier1_ml/iclr",
+      "format": "latex",
+      "review": "neurips",
+      "experiment": true
+    },
+    "cvpr_2025": {
+      "template": "tier1_ml/cvpr_proper",
+      "format": "latex",
+      "review": "neurips",
+      "experiment": true
+    },
+    "aaai_2025": {
+      "template": "tier1_ml/aaai",
+      "format": "latex",
+      "review": "neurips",
+      "experiment": true
+    },
+    "acl_2025": {
+      "template": "tier1_ml/acl_proper",
+      "format": "latex",
+      "review": "neurips",
+      "experiment": true
+    },
+    "emnlp_2025": {
+      "template": "tier1_ml/acl_proper",
+      "format": "latex",
+      "review": "neurips",
+      "experiment": true
+    },
+    "kdd_2025": {
+      "template": "tier1_ml/ieee_proper",
+      "format": "latex",
+      "review": "neurips",
+      "experiment": true
+    },
+    "arxiv_preprint": {
+      "template": "tier1_ml/neurips",
+      "format": "latex",
+      "review": "neurips",
+      "experiment": true
+    },
+    "ml_workshop": {
+      "template": "tier1_ml/neurips",
+      "format": "latex",
+      "review": "neurips",
+      "experiment": true
+    },
+    "ieee_trans": {
+      "template": "tier1_ml/ieee_proper",
+      "format": "latex",
+      "review": "neurips"
+    },
+    "acm_computing": {
+      "template": "tier1_ml/ieee_proper",
+      "format": "latex",
+      "review": "neurips"
+    },
+    "plos_one": {
+      "template": "tier1_ml/neurips",
+      "format": "latex",
+      "review": "neurips"
+    },
+    "nature_article": {
+      "template": "tier1_ml/neurips",
+      "format": "latex",
+      "review": "neurips"
+    },
+    "nature_science": {
+      "template": "tier1_ml/neurips",
+      "format": "latex",
+      "review": "neurips"
+    },
+    "aps_phys_rev": {
+      "template": "tier1_ml/ieee_proper",
+      "format": "latex",
+      "review": "neurips"
+    },
+    "science_letter": {
+      "template": "tier1_ml/neurips",
+      "format": "latex",
+      "review": "neurips"
+    }
+  },
+  "tier2_medical": {
+    "bmj_research": {
+      "template": "tier2_medical/bmj",
+      "format": "latex",
+      "review": "consort",
+      "source": "web:overleaf"
+    },
+    "jama_research": {
+      "template": "tier2_medical/bmj",
+      "format": "latex",
+      "review": "consort",
+      "source": "web:overleaf"
+    },
+    "lancet_article": {
+      "template": "tier2_medical/bmj",
+      "format": "latex",
+      "review": "consort",
+      "source": "web:overleaf"
+    },
+    "consort_rct": {
+      "template": "tier2_medical/consort",
+      "format": "latex",
+      "review": "consort",
+      "source": "web:consort-statement.org"
+    },
+    "cochrane_review": {
+      "template": "tier2_medical/prisma",
+      "format": "latex",
+      "review": "consort",
+      "source": "web:cochrane.org"
+    },
+    "care_case_report": {
+      "template": "tier2_medical/guideline_proper",
+      "format": "markdown",
+      "review": "consort",
+      "source": "web:care-statement.org"
+    },
+    "stard_diagnostic": {
+      "template": "tier2_medical/guideline_proper",
+      "format": "markdown",
+      "review": "consort",
+      "source": "web:stard-statement.org"
+    },
+    "strobe_observational": {
+      "template": "tier2_medical/guideline_proper",
+      "format": "markdown",
+      "review": "consort",
+      "source": "web:strobe-statement.org"
+    },
+    "arrive_animal": {
+      "template": "tier2_medical/guideline_proper",
+      "format": "markdown",
+      "review": "consort",
+      "source": "web:arriveguidelines.org"
+    },
+    "ich_clinical_trial": {
+      "template": "tier2_medical/consort",
+      "format": "latex",
+      "review": "consort",
+      "source": "web:ich.org"
+    },
+    "pubmed_medical": {
+      "template": "tier2_medical/bmj",
+      "format": "latex",
+      "review": "consort"
+    },
+    "prisma_systematic": {
+      "template": "tier2_medical/prisma",
+      "format": "latex",
+      "review": "consort",
+      "source": "web:prisma-statement.org"
+    }
+  },
+  "tier3_business": {
+    "mckinsey_report": {
+      "template": "tier3_business/consulting_proper",
+      "format": "markdown",
+      "review": "consulting"
+    },
+    "bcg_scqa": {
+      "template": "tier3_business/consulting_proper",
+      "format": "markdown",
+      "review": "consulting"
+    },
+    "dcf_valuation": {
+      "template": "tier3_business/dcf",
+      "format": "markdown",
+      "review": "consulting",
+      "source": "web:cfi"
+    },
+    "pe_due_diligence": {
+      "template": "tier3_business/due_diligence",
+      "format": "markdown",
+      "review": "consulting",
+      "source": "web:eloquens"
+    },
+    "gartner_magic_q": {
+      "template": "tier3_business/consulting_proper",
+      "format": "markdown",
+      "review": "consulting"
+    },
+    "competitive_intel": {
+      "template": "tier3_business/consulting_proper",
+      "format": "markdown",
+      "review": "consulting"
+    },
+    "amazon_6pager": {
+      "template": "tier3_business/amazon_6pager",
+      "format": "markdown",
+      "review": "consulting"
+    },
+    "sequoia_memo": {
+      "template": "tier3_business/consulting_proper",
+      "format": "markdown",
+      "review": "consulting"
+    },
+    "esg_gri_sasb": {
+      "template": "tier3_business/esg",
+      "format": "markdown",
+      "review": "consulting",
+      "source": "web:expertesg"
+    },
+    "moodys_credit": {
+      "template": "tier3_business/credit_rating",
+      "format": "markdown",
+      "review": "consulting",
+      "source": "web:moodys"
+    },
+    "ipo_prospectus": {
+      "template": "tier3_business/s1",
+      "format": "markdown",
+      "review": "consulting",
+      "source": "web:sec.gov"
+    },
+    "cfa_research": {
+      "template": "tier3_business/consulting_proper",
+      "format": "markdown",
+      "review": "consulting"
+    },
+    "market_analysis": {
+      "template": "tier3_business/consulting_proper",
+      "format": "markdown",
+      "review": "consulting"
+    },
+    "industry_report": {
+      "template": "tier3_business/consulting_proper",
+      "format": "markdown",
+      "review": "consulting"
+    },
+    "industry_whitepaper": {
+      "template": "tier3_business/consulting_proper",
+      "format": "markdown",
+      "review": "consulting"
+    },
+    "board_memo": {
+      "template": "tier3_business/consulting_proper",
+      "format": "markdown",
+      "review": "consulting"
+    },
+    "executive_briefing": {
+      "template": "tier3_business/consulting_proper",
+      "format": "markdown",
+      "review": "consulting"
+    },
+    "pitch_deck_memo": {
+      "template": "tier3_business/consulting_proper",
+      "format": "markdown",
+      "review": "consulting"
+    },
+    "consulting_proposal": {
+      "template": "tier3_business/consulting_proper",
+      "format": "markdown",
+      "review": "consulting"
+    },
+    "data_analysis_report": {
+      "template": "tier3_business/consulting_proper",
+      "format": "markdown",
+      "review": "consulting"
+    },
+    "compliance_report": {
+      "template": "tier3_business/consulting_proper",
+      "format": "markdown",
+      "review": "consulting"
+    },
+    "audit_report_gao": {
+      "template": "tier3_business/consulting_proper",
+      "format": "markdown",
+      "review": "consulting"
+    },
+    "yc_memo": {
+      "template": "tier3_business/consulting_proper",
+      "format": "markdown",
+      "review": "consulting"
+    },
+    "g2_product_review": {
+      "template": "tier3_business/consulting_proper",
+      "format": "markdown",
+      "review": "consulting"
+    },
+    "smart_okr": {
+      "template": "tier3_business/consulting_proper",
+      "format": "markdown",
+      "review": "consulting"
+    }
+  },
+  "tier4_academic": {
+    "phd_dissertation": {
+      "template": "tier4_academic/dissertate_proper",
+      "format": "latex",
+      "review": "grant"
+    },
+    "masters_thesis": {
+      "template": "tier4_academic/dissertate_proper",
+      "format": "latex",
+      "review": "grant"
+    },
+    "grant_proposal": {
+      "template": "tier4_academic/grant_proper",
+      "format": "latex",
+      "review": "grant"
+    },
+    "grant_proposal_general": {
+      "template": "tier4_academic/grant_proper",
+      "format": "latex",
+      "review": "grant"
+    },
+    "nih_r01": {
+      "template": "tier4_academic/grant_proper",
+      "format": "latex",
+      "review": "grant"
+    },
+    "nsf_standard": {
+      "template": "tier4_academic/grant_proper",
+      "format": "latex",
+      "review": "grant"
+    },
+    "nsfc_china": {
+      "template": "tier4_academic/grant_proper",
+      "format": "latex",
+      "review": "grant"
+    },
+    "erc_starting": {
+      "template": "tier4_academic/grant_proper",
+      "format": "latex",
+      "review": "grant"
+    },
+    "horizon_europe": {
+      "template": "tier4_academic/grant_proper",
+      "format": "latex",
+      "review": "grant"
+    },
+    "darpa_baa": {
+      "template": "tier4_academic/grant_proper",
+      "format": "latex",
+      "review": "grant"
+    },
+    "wellcome_trust": {
+      "template": "tier4_academic/grant_proper",
+      "format": "latex",
+      "review": "grant"
+    },
+    "sbir_phase1": {
+      "template": "tier4_academic/grant_proper",
+      "format": "latex",
+      "review": "grant"
+    },
+    "college_essay": {
+      "template": "tier4_academic/college_essay",
+      "format": "markdown",
+      "review": "grant"
+    },
+    "college_essay_common": {
+      "template": "tier4_academic/college_essay",
+      "format": "markdown",
+      "review": "grant"
+    },
+    "scholarship_essay": {
+      "template": "tier4_academic/scholarship",
+      "format": "markdown",
+      "review": "grant"
+    },
+    "graduate_sop": {
+      "template": "tier4_academic/grad_sop",
+      "format": "markdown",
+      "review": "grant"
+    },
+    "undergrad_essay_apa": {
+      "template": "tier4_academic/college_essay",
+      "format": "markdown",
+      "review": "grant"
+    },
+    "undergrad_essay_mla": {
+      "template": "tier4_academic/college_essay",
+      "format": "markdown",
+      "review": "grant"
+    },
+    "lit_review": {
+      "template": "tier4_academic/lit_review",
+      "format": "markdown",
+      "review": "grant"
+    },
+    "literature_review": {
+      "template": "tier4_academic/lit_review",
+      "format": "markdown",
+      "review": "grant"
+    }
+  },
+  "tier5_legal": {
+    "legal_brief": {
+      "template": "tier5_legal/legal_brief_proper",
+      "format": "markdown",
+      "review": "legal"
+    },
+    "legal_memo": {
+      "template": "tier5_legal/legal_brief_proper",
+      "format": "markdown",
+      "review": "legal"
+    },
+    "legal_memo_irac": {
+      "template": "tier5_legal/legal_brief_proper",
+      "format": "markdown",
+      "review": "legal"
+    },
+    "patent_application": {
+      "template": "tier5_legal/patent_proper",
+      "format": "latex",
+      "review": "legal"
+    },
+    "patent_filing": {
+      "template": "tier5_legal/patent_proper",
+      "format": "latex",
+      "review": "legal"
+    },
+    "ip_opinion": {
+      "template": "tier5_legal/legal_brief_proper",
+      "format": "markdown",
+      "review": "legal"
+    },
+    "contract_analysis": {
+      "template": "tier5_legal/contract_analysis",
+      "format": "markdown",
+      "review": "legal"
+    },
+    "policy_brief": {
+      "template": "tier5_legal/legal_brief_proper",
+      "format": "markdown",
+      "review": "legal"
+    },
+    "policy_brief_rand": {
+      "template": "tier5_legal/legal_brief_proper",
+      "format": "markdown",
+      "review": "legal"
+    },
+    "policy_memo_brookings": {
+      "template": "tier5_legal/legal_brief_proper",
+      "format": "markdown",
+      "review": "legal"
+    },
+    "regulatory_comment": {
+      "template": "tier5_legal/legal_brief_proper",
+      "format": "markdown",
+      "review": "legal"
+    },
+    "oecd_ria": {
+      "template": "tier5_legal/legal_brief_proper",
+      "format": "markdown",
+      "review": "legal"
+    },
+    "omb_regulatory": {
+      "template": "tier5_legal/legal_brief_proper",
+      "format": "markdown",
+      "review": "legal"
+    },
+    "nepa_eis": {
+      "template": "tier5_legal/legal_brief_proper",
+      "format": "markdown",
+      "review": "legal"
+    },
+    "security_assessment": {
+      "template": "tier5_legal/legal_brief_proper",
+      "format": "markdown",
+      "review": "legal"
+    }
+  },
+  "tier6_content": {
+    "tech_blog": {
+      "template": "tier6_content/blog_proper",
+      "format": "markdown",
+      "review": "content",
+      "source": "web:latextemplates"
+    },
+    "newsletter": {
+      "template": "tier6_content/blog_proper",
+      "format": "markdown",
+      "review": "content",
+      "source": "web:latextemplates"
+    },
+    "press_release": {
+      "template": "tier6_content/press_release_proper",
+      "format": "markdown",
+      "review": "content",
+      "source": "web:latextemplates"
+    },
+    "press_release_ap": {
+      "template": "tier6_content/press_release_proper",
+      "format": "markdown",
+      "review": "content"
+    },
+    "news_article_ap": {
+      "template": "tier6_content/press_release_proper",
+      "format": "markdown",
+      "review": "content"
+    },
+    "op_ed_pulitzer": {
+      "template": "tier6_content/press_release_proper",
+      "format": "markdown",
+      "review": "content"
+    },
+    "feature_story": {
+      "template": "tier6_content/press_release_proper",
+      "format": "markdown",
+      "review": "content"
+    },
+    "investigative_report": {
+      "template": "tier6_content/case_study",
+      "format": "markdown",
+      "review": "content"
+    },
+    "fact_check_ifcn": {
+      "template": "tier6_content/case_study",
+      "format": "markdown",
+      "review": "content"
+    },
+    "content_strategy": {
+      "template": "tier6_content/case_study",
+      "format": "markdown",
+      "review": "content"
+    },
+    "seo_eeat": {
+      "template": "tier6_content/case_study",
+      "format": "markdown",
+      "review": "content"
+    },
+    "book_proposal": {
+      "template": "tier6_content/case_study",
+      "format": "markdown",
+      "review": "content"
+    },
+    "short_story": {
+      "template": "tier6_content/rfc",
+      "format": "markdown",
+      "review": "content"
+    },
+    "screenplay_final_draft": {
+      "template": "tier6_content/screenplay_proper",
+      "format": "markdown",
+      "review": "content",
+      "source": "web:fountain.io"
+    },
+    "podcast_script": {
+      "template": "tier6_content/rfc",
+      "format": "markdown",
+      "review": "content"
+    },
+    "speech_keynote": {
+      "template": "tier6_content/rfc",
+      "format": "markdown",
+      "review": "content"
+    },
+    "brand_guidelines": {
+      "template": "tier6_content/brand_guidelines",
+      "format": "markdown",
+      "review": "content"
+    },
+    "tutorial_howto": {
+      "template": "tier6_content/tutorial",
+      "format": "markdown",
+      "review": "content"
+    },
+    "tech_spec": {
+      "template": "tier6_content/tech_spec",
+      "format": "markdown",
+      "review": "content"
+    },
+    "api_documentation": {
+      "template": "tier6_content/api_doc",
+      "format": "markdown",
+      "review": "content"
+    },
+    "runbook": {
+      "template": "tier6_content/runbook",
+      "format": "markdown",
+      "review": "content"
+    },
+    "sre_postmortem": {
+      "template": "tier6_content/postmortem",
+      "format": "markdown",
+      "review": "content"
+    },
+    "job_description": {
+      "template": "tier6_content/rfc",
+      "format": "markdown",
+      "review": "content"
+    },
+    "performance_review": {
+      "template": "tier6_content/rfc",
+      "format": "markdown",
+      "review": "content"
+    },
+    "meeting_minutes": {
+      "template": "tier6_content/rfc",
+      "format": "markdown",
+      "review": "content"
+    },
+    "curriculum_design": {
+      "template": "tier6_content/curriculum",
+      "format": "markdown",
+      "review": "content"
+    },
+    "addie_training": {
+      "template": "tier6_content/curriculum",
+      "format": "markdown",
+      "review": "content"
+    },
+    "lesson_plan_blooms": {
+      "template": "tier6_content/lesson_plan",
+      "format": "markdown",
+      "review": "content"
+    },
+    "change_management": {
+      "template": "tier6_content/case_study",
+      "format": "markdown",
+      "review": "content"
+    },
+    "tech_report": {
+      "template": "tier6_content/whitepaper",
+      "format": "markdown",
+      "review": "content"
+    },
+    "technical_report_ieee": {
+      "template": "tier1_ml/ieee_proper",
+      "format": "latex",
+      "review": "content"
+    },
+    "whitepaper_tech": {
+      "template": "tier6_content/whitepaper",
+      "format": "markdown",
+      "review": "content"
+    },
+    "research_note": {
+      "template": "tier6_content/rfc",
+      "format": "markdown",
+      "review": "content"
+    },
+    "research_proposal_edu": {
+      "template": "tier4_academic/grant_proper",
+      "format": "latex",
+      "review": "content"
+    },
+    "rfc_proposal": {
+      "template": "tier6_content/rfc",
+      "format": "markdown",
+      "review": "content"
+    },
+    "case_study": {
+      "template": "tier6_content/case_study",
+      "format": "markdown",
+      "review": "content"
+    },
+    "hbs_case_study": {
+      "template": "tier6_content/case_study",
+      "format": "markdown",
+      "review": "content"
+    },
+    "comparison_analysis": {
+      "template": "tier6_content/case_study",
+      "format": "markdown",
+      "review": "content"
+    },
+    "adr_decision": {
+      "template": "tier6_content/adr_proper",
+      "format": "markdown",
+      "review": "content"
+    },
+    "aida_sales_page": {
+      "template": "tier6_content/case_study",
+      "format": "markdown",
+      "review": "content"
+    },
+    "product_launch_brief": {
+      "template": "tier6_content/case_study",
+      "format": "markdown",
+      "review": "content"
+    },
+    "postmortem": {
+      "template": "tier6_content/postmortem",
+      "format": "markdown",
+      "review": "content",
+      "_tier": "tier6_content"
+    }
+  }
+}

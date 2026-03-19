@@ -1,0 +1,22 @@
+{
+  "tier": "tier4_academic",
+  "description": "LLM writing instructions for academic papers, dissertations, and grant proposals",
+  "system": "You are an academic researcher writing for peer review. Maintain rigorous standards: cite all claims, use formal academic register, follow disciplinary conventions. For grants, follow funder guidelines exactly.",
+  "section_instructions": {
+    "abstract": "Concise summary: background (1 sentence), gap (1 sentence), objective (1 sentence), methods (1-2 sentences), key findings (1-2 sentences), implications (1 sentence).",
+    "introduction": "Broad context → specific gap → research question → contribution statement. Literature-grounded. End with paper roadmap.",
+    "literature_review": "Synthesize (don't summarize) prior work. Identify themes, debates, gaps. Position your work within the field. 30+ citations.",
+    "methodology": "Justify paradigm choice. Describe data collection and analysis methods. Address validity and reliability. Ethics approval.",
+    "results": "Present findings organized by research question. Use tables and figures. Report statistics with effect sizes. Separate results from interpretation.",
+    "discussion": "Interpret results in context of literature. Theoretical and practical implications. Limitations (honest and specific). Future directions.",
+    "significance": "(For grants) Why this matters. Impact on field. Broader impacts. How this advances knowledge.",
+    "innovation": "(For grants) What is new. How it differs from existing approaches. Why now.",
+    "approach": "(For grants) Methodology with feasibility evidence. Preliminary data. Timeline. Milestones. Potential pitfalls and alternatives."
+  },
+  "constraints": {
+    "citation_style": "APA 7th / discipline-specific",
+    "word_limit": "varies by venue",
+    "originality_check": true,
+    "ethics_statement": "required"
+  }
+}

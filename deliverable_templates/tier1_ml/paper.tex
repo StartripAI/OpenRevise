@@ -1,0 +1,113 @@
+\input{conf_preamble}
+% Document starts
+\begin{document}
+
+\ifthenelse{\equal{\conf}{siggraph}}{
+    \input{siggraph/siggraph_metadata}
+    \input{abstract}
+    \input{siggraph/siggraph_ccs_keyword}
+}{}
+
+\ifthenelse{\equal{\conf}{uist}}{
+    \input{uist/uist_metadata}
+    \input{abstract}
+    \input{uist/uist_ccs_keyword}
+}{}
+
+
+\ifthenelse{\equal{\conf}{chi}}{
+    \input{chi/chi_metadata}
+    \input{abstract}
+    \input{chi/chi_ccs_keyword}
+}{}
+
+
+\ifthenelse{\equal{\conf}{tvcg}}{
+    \input{ieeetrans/ieeetrans_metadata}
+    \IEEEtitleabstractindextext{
+    \input{abstract}
+        \begin{IEEEkeywords}
+        keywords...
+        \end{IEEEkeywords}
+    }
+    % \input{uist/uist_ccs_keyword}
+}{}
+
+\ifthenelse{\equal{\conf}{cvpr}}{
+    \input{cvpr/cvpr_metadata}
+}{}
+
+\ifthenelse{\equal{\conf}{eccv}}{
+    \input{eccv/eccv_metadata}
+}{}
+
+\ifthenelse{\equal{\conf}{pg}}{
+    \input{cgf/cgf_metadata}
+}{}
+
+\maketitle
+
+\ifthenelse{\equal{\conf}{cvpr} \OR \equal{\conf}{eccv} \OR \equal{\conf}{neurips}
+    \OR \equal{\conf}{aaai} \OR \equal{\conf}{iclr}}{
+\input{abstract}
+}{}
+
+\ifthenelse{\equal{\conf}{pg}}{
+    \input{abstract}
+    % \input{cgf_ccs_keyword}
+}{}
+
+\ifthenelse{\equal{\conf}{tvcg}}{
+\IEEEdisplaynontitleabstractindextext
+\IEEEpeerreviewmaketitle
+}{}
+
+\input{introduction}
+\input{relatedwork}
+\input{overview}
+\input{method}
+\input{experiment}
+\input{conclusion}
+
+
+\ifthenelse{\equal{\conf}{siggraph} \OR \equal{\conf}{uist} \OR \equal{\conf}{chi}}{
+    \bibliographystyle{ACM-Reference-Format}
+    \bibliography{paper}
+}{}
+
+\ifthenelse{\equal{\conf}{cvpr}}{
+    \bibliographystyle{ieee_fullname}
+    \bibliography{paper}
+}{}
+
+\ifthenelse{\equal{\conf}{eccv}}{
+    \bibliographystyle{splncs04}
+    \bibliography{paper}
+}{}
+
+%% any other conf? check -> sgp, sca, egsr 
+\ifthenelse{\equal{\conf}{pg} \OR \equal{\conf}{eg} \OR \equal{\conf}{cgf}}{
+    \bibliographystyle{eg-alpha-doi} 
+    \bibliography{paper}       
+}{}
+
+\ifthenelse{\equal{\conf}{tvcg}}{
+    \bibliographystyle{IEEEtran}
+    % argument is your BibTeX string definitions and bibliography database(s)
+    \bibliography{paper}
+}{}
+\ifthenelse{\equal{\conf}{neurips}}{
+    \bibliographystyle{plainnat}
+    \bibliography{paper}
+}{}
+\ifthenelse{\equal{\conf}{aaai}}{
+    % \bibliographystyle{aaai24}
+    \bibliography{paper}       
+}{}
+\ifthenelse{\equal{\conf}{iclr}}{
+\bibliography{iclr2024_conference}
+\bibliographystyle{iclr2024_conference}   
+}{}
+
+
+\end{document}

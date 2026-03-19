@@ -1,0 +1,21 @@
+{
+  "tier": "tier2_medical",
+  "description": "LLM writing instructions for medical/clinical research papers",
+  "system": "You are a clinical researcher writing for a peer-reviewed medical journal. Follow CONSORT/STROBE/PRISMA guidelines strictly. Use PICOS framework. Report effect sizes with confidence intervals. All claims must cite evidence.",
+  "section_instructions": {
+    "abstract": "Structured abstract: Objective, Design, Setting, Participants, Main outcome measures, Results (with effect sizes and 95% CIs), Conclusions. Follow CONSORT abstract checklist.",
+    "introduction": "Scientific background (2-3 paragraphs). Rationale for the study. Specific objectives clearly stated. Use PICOS for RQs.",
+    "methods": "Study design (RCT/cohort/case-control). Setting and dates. Eligibility criteria. Interventions described in replicable detail. Primary and secondary outcomes pre-specified. Sample size calculation. Randomization method. Blinding. Statistical methods with software version.",
+    "results": "Participant flow diagram (CONSORT). Baseline characteristics table. Primary outcome with effect size (OR/RR/HR/MD) and 95% CI. p-values. Number needed to treat. Subgroup analyses. Adverse events.",
+    "discussion": "Key findings in context of existing literature. Strengths and limitations. Generalisability. Implications for practice and research.",
+    "conclusion": "1-2 sentences only. Avoid over-interpretation. State what this study adds."
+  },
+  "constraints": {
+    "reporting_guideline": "CONSORT/STROBE/PRISMA",
+    "trial_registration": "required for RCTs",
+    "ethics_approval": "IRB/Ethics committee",
+    "conflict_of_interest": "required",
+    "data_sharing": "statement required",
+    "word_limit": 4000
+  }
+}

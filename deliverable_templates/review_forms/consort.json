@@ -1,0 +1,10 @@
+{
+  "venue": "Medical Journal (CONSORT)",
+  "criteria": [
+    {"name": "Methodology", "weight": 10, "scale": "1-10", "description": "Study design, randomization, blinding"},
+    {"name": "Reporting_completeness", "weight": 10, "scale": "1-10", "description": "CONSORT 25-item checklist adherence"},
+    {"name": "Statistical_analysis", "weight": 10, "scale": "1-10", "description": "Appropriate methods, sample size, power"},
+    {"name": "Clinical_significance", "weight": 10, "scale": "1-10", "description": "Clinical relevance and patient impact"},
+    {"name": "Ethics", "weight": 5, "scale": "1-5", "description": "IRB approval, informed consent, registration"}
+  ]
+}

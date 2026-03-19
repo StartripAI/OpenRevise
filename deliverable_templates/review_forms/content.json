@@ -1,0 +1,10 @@
+{
+  "venue": "Content/Publication",
+  "criteria": [
+    {"name": "Clarity", "weight": 10, "scale": "1-10", "description": "Clear, engaging, well-structured writing"},
+    {"name": "Accuracy", "weight": 10, "scale": "1-10", "description": "Factual correctness and source attribution"},
+    {"name": "Audience_fit", "weight": 10, "scale": "1-10", "description": "Appropriate tone and depth for target audience"},
+    {"name": "Completeness", "weight": 10, "scale": "1-10", "description": "Topic fully covered without gaps"},
+    {"name": "Actionability", "weight": 10, "scale": "1-10", "description": "Clear takeaways and next steps"}
+  ]
+}

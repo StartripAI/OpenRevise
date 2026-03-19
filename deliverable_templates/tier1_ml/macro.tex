@@ -1,0 +1,112 @@
+%!TEX root = algo.tex
+%%% Packages use.
+% \usepackage[labelfont=bf,textfont=it]{caption}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{multirow}
+\usepackage{bigdelim}
+% \usepackage{subfigure}
+\usepackage{color}
+\usepackage{booktabs}
+\usepackage{ifthen}
+% \usepackage{hyperref} % comment out for AAAI
+% \usepackage{subfig}
+\usepackage{subcaption}
+\usepackage{bbold}
+% \usepackage[noabbrev]{cleveref}
+\ifthenelse{\equal{\conf}{cvpr}}
+{
+}
+{
+\usepackage[noabbrev,capitalise,nameinlink]{cleveref}
+\creflabelformat{equation}{#2\textup{#1}#3}% 
+}
+
+% \usepackage{todonotes}
+\usepackage{xcolor, pgf}
+\usepackage{color, colortbl}
+% \usepackage[normalem]{ulem} % for sout  % comment out for AAAI
+\usepackage{placeins}
+\usepackage{soul}
+\usepackage[skins]{tcolorbox}
+
+
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+\algnewcommand\algorithmicinput{\textbf{Input:}}
+\algnewcommand\INPUT{\item[\algorithmicinput]}
+\algnewcommand\algorithmicoutput{\textbf{Output:}}
+\algnewcommand\OUTPUT{\item[\algorithmicoutput]}
+\algnewcommand\algorithmicforeach{\textbf{for each}}
+\algtext*{EndFor}% Remove "end for" text
+
+\algdef{S}[FOR]{ForEach}[1]{\algorithmicforeach\ #1\ \algorithmicdo}
+\algrenewcommand{\alglinenumber}[1]{\color{red!80!blue}\footnotesize#1:}
+\renewcommand{\algorithmiccomment}[1]{\hfill$\triangleright$\textcolor{blue}{#1}}
+\algnewcommand\Func[2]{\textcolor{green}{#1}\textcolor{green}{(#2)}}
+\algnewcommand\Insert[2]{Insert {#1} to #2.}
+\algnewcommand\Input[1]{\State \textbf{Input: } #1}
+\algnewcommand\Output[1]{\State \textbf{Output: } #1}
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+
+\newlength\myboxwidth
+\setlength{\myboxwidth}{\dimexpr\textwidth-2\fboxsep}
+
+%%% Color definition.
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{green}{rgb}{0, 0.6, 0}
+\definecolor{orange}{rgb}{1, 0.5, 0}
+\definecolor{mahogany}{rgb}{0.75, 0.25, 0.0}
+\definecolor{purple}{rgb}{0.6, 0, 0.6}
+\definecolor{darkgreen}{rgb}{0, 0.3, 0}
+\definecolor{orange}{rgb}{1, 0.5, 0.}
+\definecolor{lightblue}{rgb}{0.52, 0.75,0.91}
+\definecolor{softgreen}{rgb}{0.66,0.87,0.74}
+\definecolor{softred}{rgb}{0.96,0.71,0.69}
+\newcommand{\ichao}[1]{\textcolor{blue}{{#1}}}
+
+%% some useful command for discussion and leaving notes on the paper.
+\DeclareRobustCommand{\xxcmt}[1]{
+  \begingroup
+  \definecolor{hlcolor}{RGB}{168,221,188}\sethlcolor{hlcolor}%
+  \hl{\textbf{xx:} #1}%
+  \endgroup
+}
+\DeclareRobustCommand{\todo}[1]{
+  \begingroup
+  \definecolor{hlcolor}{RGB}{245,183,177}\sethlcolor{hlcolor}%
+  \hl{\textbf{TODO:} #1}%
+  \endgroup
+}
+
+\newcommand{\discuss}[1]{\textcolor{orange}{\textbf{#1}}}
+\newcommand{\upd}[1]{\colorbox{yellow}{#1}}
+\newcommand{\expect}{\mathop{\mathbb{E}}\nolimits}
+%%% Editing comments.
+% ignore this
+\newcommand{\ignore}[1]{}
+\newcommand{\none}[1]{}
+\newcommand{\com}[1]{}
+% comment
+\newcommand{\cmt}[1]{\begin{sloppypar}\large\textcolor{red}{#1}\end{sloppypar}}
+%%% Frequently used terms.
+\ifthenelse{\equal{\conf}{cvpr}}
+{
+}
+{
+\newcommand{\etal}{{\it{et~al.}}}
+\newcommand{\ie}{i.e.,}
+\newcommand{\eg}{e.g.,}
+}
+
+\ifthenelse{\equal{\conf}{iclr}}
+{
+}
+{
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+}
+\DeclareMathOperator*{\minimize}{minimize}

@@ -1,0 +1,11 @@
+{
+  "venue": "NeurIPS",
+  "criteria": [
+    {"name": "Soundness", "weight": 4, "scale": "1-4", "description": "Technical correctness of claims and proofs"},
+    {"name": "Contribution", "weight": 4, "scale": "1-4", "description": "Significance and novelty of contribution"},
+    {"name": "Clarity", "weight": 4, "scale": "1-4", "description": "Quality of writing and presentation"},
+    {"name": "Overall", "weight": 10, "scale": "1-10", "description": "Overall recommendation"},
+    {"name": "Confidence", "weight": 5, "scale": "1-5", "description": "Reviewer confidence in assessment"}
+  ],
+  "decision_thresholds": {"accept": 6, "weak_accept": 5, "borderline": 4, "reject": 3}
+}

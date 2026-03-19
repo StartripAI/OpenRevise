@@ -1,0 +1,10 @@
+{
+  "venue": "Grant Proposal (NSF/NIH)",
+  "criteria": [
+    {"name": "Significance", "weight": 10, "scale": "1-10", "description": "Importance of the research problem"},
+    {"name": "Innovation", "weight": 10, "scale": "1-10", "description": "Novel concepts, approaches, or methods"},
+    {"name": "Approach", "weight": 10, "scale": "1-10", "description": "Well-reasoned methodology and feasibility"},
+    {"name": "Investigator", "weight": 10, "scale": "1-10", "description": "PI qualifications and track record"},
+    {"name": "Environment", "weight": 10, "scale": "1-10", "description": "Institutional resources and support"}
+  ]
+}

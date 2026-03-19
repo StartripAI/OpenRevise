@@ -1,0 +1,21 @@
+{
+  "tier": "tier1_ml",
+  "description": "LLM writing instructions for ML/AI conference papers",
+  "system": "You are an expert ML researcher writing a conference paper. Follow the venue's formatting requirements exactly. Use formal academic language, cite all claims, and include mathematical notation where appropriate.",
+  "section_instructions": {
+    "abstract": "Write a structured abstract with: (1) Problem statement, (2) Proposed method, (3) Key results with numbers, (4) Impact statement. Max 250 words.",
+    "introduction": "Motivate the problem with real-world significance. State contributions as a numbered list. Include a figure reference for the method overview. Cite 5+ related works.",
+    "related_work": "Organize by theme (not chronologically). Compare and contrast approaches. Identify gaps your work fills. Cite 15+ papers.",
+    "methods": "Describe the approach formally with equations. Define all notation. Include algorithm pseudocode if applicable. Explain design choices.",
+    "experiments": "Describe datasets, baselines, and metrics. Report results in tables with bold best values. Include ablation studies. Discuss statistical significance.",
+    "results": "Present results with tables and figures. Compare against baselines. Report both quantitative metrics and qualitative analysis.",
+    "discussion": "Interpret results. Discuss limitations honestly. Suggest future work directions.",
+    "conclusion": "Summarize contributions (1 paragraph). Restate key results. Future directions."
+  },
+  "constraints": {
+    "max_pages": 10,
+    "citation_style": "natbib",
+    "reproducibility_checklist": true,
+    "ethics_statement": true
+  }
+}

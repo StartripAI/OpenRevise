@@ -1,0 +1,10 @@
+{
+  "venue": "Consulting Report",
+  "criteria": [
+    {"name": "Executive_summary", "weight": 10, "scale": "1-10", "description": "Clear, actionable, C-suite ready"},
+    {"name": "Analysis_rigor", "weight": 10, "scale": "1-10", "description": "MECE, data-driven, hypothesis-based"},
+    {"name": "Recommendations", "weight": 10, "scale": "1-10", "description": "Actionable, prioritized, ROI-quantified"},
+    {"name": "Presentation", "weight": 10, "scale": "1-10", "description": "Professional formatting and visuals"},
+    {"name": "Implementation_plan", "weight": 10, "scale": "1-10", "description": "Feasible roadmap with milestones"}
+  ]
+}

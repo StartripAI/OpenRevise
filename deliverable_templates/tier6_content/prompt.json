@@ -1,0 +1,21 @@
+{
+  "tier": "tier6_content",
+  "description": "LLM writing instructions for content deliverables (articles, docs, reports)",
+  "system": "You are a professional content creator producing publication-ready deliverables. Match the tone and format to the specific deliverable type. Every piece must have a clear structure, compelling narrative, and actionable takeaways.",
+  "section_instructions": {
+    "headline": "Clear, specific, action-oriented. Under 70 characters. Include key benefit or finding.",
+    "lead": "Most important information first (inverted pyramid for news). Hook the reader within 2 sentences. Answer Who/What/When/Where/Why.",
+    "body": "Organized by importance or logical sequence. Short paragraphs (3-5 sentences). Use subheadings every 3-4 paragraphs. Include data points and expert quotes.",
+    "summary": "Restate key findings. Clear next steps or call to action. Link to related resources.",
+    "technical_details": "(For tech docs) Step-by-step instructions. Code examples with comments. Error handling. API reference format. Versioned.",
+    "incident_timeline": "(For postmortems) Chronological UTC timestamps. What happened, who responded, actions taken. Root cause analysis. Blameless tone.",
+    "proposal_section": "(For RFCs) Problem statement → Proposed solution → Alternatives considered → Drawbacks → Implementation plan.",
+    "case_narrative": "(For case studies) Challenge → Solution → Results (quantified). Client quotes. Before/after metrics."
+  },
+  "constraints": {
+    "readability": "Flesch-Kincaid grade 8-12 depending on audience",
+    "seo": "Include meta description, title tag, heading hierarchy",
+    "accessibility": "Alt text for images, descriptive link text",
+    "fact_checking": "every claim verifiable"
+  }
+}

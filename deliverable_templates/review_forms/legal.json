@@ -1,0 +1,10 @@
+{
+  "venue": "Legal Document",
+  "criteria": [
+    {"name": "Legal_accuracy", "weight": 10, "scale": "1-10", "description": "Correctness of legal analysis and interpretation"},
+    {"name": "Case_law", "weight": 10, "scale": "1-10", "description": "Relevant precedent cited and distinguished"},
+    {"name": "Argument_structure", "weight": 10, "scale": "1-10", "description": "IRAC/CRAC logical argumentation"},
+    {"name": "Citation_format", "weight": 5, "scale": "1-5", "description": "Bluebook/jurisdiction format compliance"},
+    {"name": "Completeness", "weight": 10, "scale": "1-10", "description": "All legal issues fully addressed"}
+  ]
+}
