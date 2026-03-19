@@ -6,8 +6,7 @@
     <title>IdeaClaw Institute - Autonomous Generation</title>
     <style>
         :root {
-            /* Stanford / Harvard inspired palette */
-            --primary-crimson: #8C1515; /* Stanford Cardinal */
+            --primary-crimson: #8C1515; 
             --dark-crimson: #6b0f0f;
             --text-heading: #2e2d29;
             --text-body: #4d4f53;
@@ -51,6 +50,11 @@
             letter-spacing: 0.5px;
         }
 
+        .navbar-links {
+            display: flex;
+            align-items: center;
+        }
+
         .navbar-links a {
             font-family: var(--font-sans);
             font-size: 15px;
@@ -67,6 +71,25 @@
             color: var(--primary-crimson);
         }
 
+        /* Language Toggle Button */
+        .lang-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            padding: 6px 12px;
+            margin-left: 32px;
+            font-family: var(--font-sans);
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-heading);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .lang-btn:hover {
+            border-color: var(--text-heading);
+            background: var(--bg-gray);
+        }
+
         /* Hero Section */
         .hero {
             padding: 100px 60px;
@@ -77,17 +100,17 @@
 
         .hero h1 {
             font-family: var(--font-serif);
-            font-size: 56px;
+            font-size: 52px;
             color: var(--text-heading);
             margin-bottom: 24px;
-            line-height: 1.1;
-            max-width: 900px;
+            line-height: 1.2;
+            max-width: 1000px;
             margin-left: auto;
             margin-right: auto;
         }
 
         .hero p {
-            font-size: 22px;
+            font-size: 20px;
             color: var(--text-body);
             max-width: 800px;
             margin: 0 auto 40px auto;
@@ -169,7 +192,7 @@
 
         .section-header p {
             font-size: 18px;
-            max-width: 700px;
+            max-width: 800px;
             margin: 0 auto;
         }
 
@@ -229,71 +252,135 @@
 
         @media (max-width: 768px) {
             .navbar { padding: 20px; flex-direction: column; gap: 16px; }
-            .navbar-links a { margin-left: 16px; margin-right: 16px; font-size: 13px; }
+            .navbar-links a { margin-left: 10px; margin-right: 10px; font-size: 13px; }
+            .lang-btn { margin-left: 10px; }
             .hero { padding: 60px 20px; }
-            .hero h1 { font-size: 36px; }
-            .hero p { font-size: 18px; }
+            .hero h1 { font-size: 32px; }
+            .hero p { font-size: 16px; }
             .metrics { flex-direction: column; gap: 40px; padding: 40px 20px; }
             .metric-item { border-right: none; }
             .section { padding: 60px 20px; }
         }
+
+        /* Bilingual Toggle Logic - Hiding */
+        .lang-zh { display: none; }
+        .lang-en { display: none; }
+        
+        .is-zh .lang-zh { display: inline-block; }
+        .is-en .lang-en { display: inline-block; }
+
+        /* Fixes for block level elements */
+        .is-zh h1 .lang-zh, .is-zh p .lang-zh, .is-zh h2 .lang-zh, .is-zh h3 .lang-zh { display: block; }
+        .is-en h1 .lang-en, .is-en p .lang-en, .is-en h2 .lang-en, .is-en h3 .lang-en { display: block; }
+
     </style>
 </head>
-<body>
+<body class="is-zh">
 
     <!-- Navigation -->
     <nav class="navbar">
         <a href="#" class="navbar-logo">IdeaClaw Institute</a>
         <div class="navbar-links">
-            <a href="#">Research</a>
-            <a href="#">Architecture</a>
-            <a href="#">Publications</a>
+            <a href="#">
+                <span class="lang-zh">研究</span>
+                <span class="lang-en">Research</span>
+            </a>
+            <a href="#">
+                <span class="lang-zh">架构</span>
+                <span class="lang-en">Architecture</span>
+            </a>
             <a href="https://github.com/StartripAI/IdeaClaw" target="_blank">GitHub</a>
+            <button class="lang-btn" onclick="toggleLang()">
+                <span class="lang-zh">🌐 ENGLISH</span>
+                <span class="lang-en">🌐 简体中文</span>
+            </button>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section class="hero">
-        <h1>从核心假设，到结构化长文。</h1>
-        <p>IdeaClaw 是一套面向高规格工作与学术研究场景的 Structured Autonomous Generation Engine。结合本地大模型推演与自愈编排管线，解决长文本推理中的结构崩塌与由于上下文过载导致的逻辑遗漏问题。</p>
-        <a href="https://github.com/StartripAI/IdeaClaw" class="btn">View Source Code</a>
+    <section class="hero" id="hero-area">
+        <h1>
+            <span class="lang-zh">从核心假设，到严谨的长文巨著。</span>
+            <span class="lang-en">From a Core Hypothesis to a Structured Masterpiece.</span>
+        </h1>
+        <p>
+            <span class="lang-zh">IdeaClaw 是一套面向学术研究与高规格商业场景的结构化生成引擎。结合大模型推演与自愈编排管线，彻底消除长文本推理中的结构崩塌与逻辑遗漏问题。</span>
+            <span class="lang-en">IdeaClaw is a Structured Autonomous Generation Engine engineered for academic and high-stakes industry scenarios. Combining LLM inference with a self-healing orchestration pipeline, it eliminates structural collapse and logical omissions in long-form generation.</span>
+        </p>
+        <a href="https://github.com/StartripAI/IdeaClaw" class="btn">
+            <span class="lang-zh">获取源代码</span>
+            <span class="lang-en">View Source Code</span>
+        </a>
     </section>
 
     <!-- Metrics Bar -->
-    <div class="metrics">
+    <div class="metrics" id="metrics-area">
         <div class="metric-item">
             <div class="metric-num">131</div>
-            <div class="metric-label">Professional Templates</div>
+            <div class="metric-label">
+                <span class="lang-zh">种专业排版模板</span>
+                <span class="lang-en">Professional Templates</span>
+            </div>
         </div>
         <div class="metric-item">
             <div class="metric-num">100%</div>
-            <div class="metric-label">Structural Integrity</div>
+            <div class="metric-label">
+                <span class="lang-zh">强制结构完整度</span>
+                <span class="lang-en">Structural Integrity</span>
+            </div>
         </div>
         <div class="metric-item">
             <div class="metric-num">3x</div>
-            <div class="metric-label">Self-Healing Retries</div>
+            <div class="metric-label">
+                <span class="lang-zh">自愈纠错重试</span>
+                <span class="lang-en">Self-Healing Retries</span>
+            </div>
         </div>
     </div>
 
     <!-- Core Architecture Grid -->
-    <section class="section">
+    <section class="section" id="feature-area">
         <div class="section-header">
-            <h2>System Architecture</h2>
-            <p>Engineered to mitigate catastrophic formatting failures in Large Language Models (LLMs) through active self-healing feedback loops and strict execution contracts.</p>
+            <h2>
+                <span class="lang-zh">底层核心架构</span>
+                <span class="lang-en">System Architecture</span>
+            </h2>
+            <p>
+                <span class="lang-zh">旨在通过主动自愈反馈回路与严格的执行契约，大幅降低大型语言模型（LLMs）在格式输出上的灾难性失效。</span>
+                <span class="lang-en">Engineered to mitigate catastrophic formatting failures in Large Language Models (LLMs) through active self-healing feedback loops and strict execution contracts.</span>
+            </p>
         </div>
 
         <div class="grid">
             <div class="card">
-                <h3>Template Execution</h3>
-                <p>内置针对咨询调查、商业计划书、学术规范等场景的 131 套结构体。系统基于 MECE 框架拉出顶级骨架大纲，提供超越单个 Prompt 的确定性。</p>
+                <h3>
+                    <span class="lang-zh">模板驱动执行</span>
+                    <span class="lang-en">Template Execution</span>
+                </h3>
+                <p>
+                    <span class="lang-zh">内置 131 套严密的场景结构体。系统基于 MECE 框架拉出高级骨架大纲，提供超越单一提示词的确定性输出。</span>
+                    <span class="lang-en">Loaded with 131 rigorous structural templates. The system derives a top-tier outline based on the MECE framework, providing deterministic output far beyond traditional prompts.</span>
+                </p>
             </div>
             <div class="card">
-                <h3>Salacia Guardrails</h3>
-                <p>弃用黑盒形式的提示词工程，改用具体的 Execution Contract (执行契约)，将计算引擎置于严格的结构化输入输出约束中，彻底消灭盲目生成发散。</p>
+                <h3>
+                    <span class="lang-zh">Salacia 控制护栏</span>
+                    <span class="lang-en">Salacia Guardrails</span>
+                </h3>
+                <p>
+                    <span class="lang-zh">弃用黑盒形式的提示词工程，改用具体的执行契约（Execution Contract），将计算引擎置于严格的结构化输入输出约束中。</span>
+                    <span class="lang-en">Bypassing black-box prompt engineering in favor of concrete Execution Contracts, placing the computational engine under strict structured I/O constraints.</span>
+                </p>
             </div>
             <div class="card">
-                <h3>Structural Self-Healing</h3>
-                <p>针对生成超长文本时的 Token 熔断，构建了基于尾部解析机制的自动化截断恢复管线。若发现 LLM 截断或漏写强制章节，系统会在后台自动捕获 Error Trace 并重试，确保 100% 结构闭环。</p>
+                <h3>
+                    <span class="lang-zh">结构域自愈</span>
+                    <span class="lang-en">Structural Self-Healing</span>
+                </h3>
+                <p>
+                    <span class="lang-zh">针对超长文本的 Token 熔断，构建自动化截断恢复管线。若发现 LLM 截断或漏写，系统将在后台自动捕获错误追踪并重试。</span>
+                    <span class="lang-en">Actively mitigates Token truncation during hyper-long generations. If structural omissions are detected, the system catches error traces and autonomously retries until perfection.</span>
+                </p>
             </div>
         </div>
     </section>
@@ -301,9 +388,42 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="footer-logo">IdeaClaw Research</div>
-        <p>An open-source initiative for autonomous structural content generation and research automation.</p>
+        <p>
+            <span class="lang-zh">专注自动化研究与结构化长文生成的开源倡议项目。</span>
+            <span class="lang-en">An open-source initiative for autonomous structural content generation and research automation.</span>
+        </p>
         <p>&copy; 2026 StartripAI Infrastructure</p>
     </footer>
 
+    <script>
+        const body = document.body;
+        
+        // Auto-detect browser language on load
+        document.addEventListener("DOMContentLoaded", () => {
+            const userLang = navigator.language || navigator.userLanguage;
+            if (userLang.toLowerCase().includes('en')) {
+                body.className = 'is-en';
+            } else {
+                body.className = 'is-zh';
+            }
+        });
+
+        // Toggle function
+        function toggleLang() {
+            // Add a brief subtle fade effect for transition
+            const sections = [document.getElementById('hero-area'), document.getElementById('metrics-area'), document.getElementById('feature-area')];
+            
+            sections.forEach(sec => sec.style.opacity = '0');
+            
+            setTimeout(() => {
+                if (body.classList.contains('is-en')) {
+                    body.className = 'is-zh';
+                } else {
+                    body.className = 'is-en';
+                }
+                sections.forEach(sec => sec.style.opacity = '1');
+            }, 150);
+        }
+    </script>
 </body>
 </html>
