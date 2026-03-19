@@ -165,15 +165,30 @@ class CitationManager:
         Returns:
             Updated draft with citation reference appended to sources.
         """
-        # Add to sources section if it exists
         cite_text = f"- {paper.to_citation_string()}"
-        if "## Sources" in draft or "## References" in draft:
-            # Find the sources/references section and append
-            for header in ["## Sources", "## References", "## 📚 Sources"]:
-                if header in draft:
-                    parts = draft.split(header, 1)
-                    parts[1] = parts[1] + f"\n{cite_text}"
-                    return header.join(parts)
+        # Support English and CJK headers
+        ref_headers = [
+            "## Sources", "## References", "## 📚 Sources",
+            "## 参考文献", "## 引用", "## 出典", "## 참고문헌",
+        ]
+        matching_header = None
+        for header in ref_headers:
+            if header in draft:
+                matching_header = header
+                break
+
+        if matching_header:
+            parts = draft.split(matching_header, 1)
+            after_header = parts[1]
+            # Find the next ## header so we insert INSIDE this section
+            next_header = re.search(r'\n##\s', after_header)
+            if next_header:
+                insert_pos = next_header.start()
+                parts[1] = after_header[:insert_pos] + f"\n{cite_text}" + after_header[insert_pos:]
+            else:
+                # No subsequent section — safe to append
+                parts[1] = after_header + f"\n{cite_text}"
+            return matching_header.join(parts)
 
         # Fallback: append at end
         return draft + f"\n\n## References\n{cite_text}\n"
@@ -199,6 +214,7 @@ class CitationManager:
             return draft, []
 
         enriched = draft
+        self.rounds = []  # Reset rounds to prevent cross-run accumulation
         for round_num in range(1, self.max_rounds + 1):
             # Step 1: Identify missing citation
             prompt = self.identify_missing_citation(enriched, round_num)
@@ -212,11 +228,11 @@ class CitationManager:
                 else:
                     parsed = json.loads(response)
             except (json.JSONDecodeError, AttributeError):
-                logger.warning(f"Round {round_num}: Failed to parse citation response")
+                logger.warning("Round %d: Failed to parse citation response", round_num)
                 continue
 
             if not parsed.get("Query") or "no more" in parsed.get("Description", "").lower():
-                logger.info(f"Citation loop converged after {round_num} rounds")
+                logger.info("Citation loop converged after %d rounds", round_num)
                 break
 
             query = parsed["Query"]
@@ -242,7 +258,11 @@ class CitationManager:
 
             selected_indices = sel_parsed.get("Selected", [])
             if isinstance(selected_indices, str):
-                selected_indices = json.loads(selected_indices) if selected_indices != "[]" else []
+                try:
+                    selected_indices = json.loads(selected_indices) if selected_indices.strip() else []
+                except (json.JSONDecodeError, ValueError):
+                    logger.warning("Round %d: Malformed Selected field: %s", round_num, selected_indices)
+                    selected_indices = []
 
             selected_papers = []
             for idx in selected_indices:

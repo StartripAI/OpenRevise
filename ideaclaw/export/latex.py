@@ -240,14 +240,21 @@ def compile_latex(
     tex_file = tex_dir / "template.tex"
 
     if not tex_file.exists():
-        logger.error(f"template.tex not found in {tex_dir}")
+        logger.error("template.tex not found in %s", tex_dir)
         return False
 
+    # Remove stale PDF to prevent false-positive success detection
+    stale_pdf = tex_dir / "template.pdf"
+    if stale_pdf.exists():
+        stale_pdf.unlink()
+    if output_pdf and Path(output_pdf).exists():
+        Path(output_pdf).unlink()
+
     commands = [
-        ["pdflatex", "-interaction=nonstopmode", "template.tex"],
+        ["pdflatex", "-interaction=nonstopmode", "-no-shell-escape", "template.tex"],
         ["bibtex", "template"],
-        ["pdflatex", "-interaction=nonstopmode", "template.tex"],
-        ["pdflatex", "-interaction=nonstopmode", "template.tex"],
+        ["pdflatex", "-interaction=nonstopmode", "-no-shell-escape", "template.tex"],
+        ["pdflatex", "-interaction=nonstopmode", "-no-shell-escape", "template.tex"],
     ]
 
     logger.info("Compiling LaTeX...")
@@ -264,9 +271,9 @@ def compile_latex(
                 timeout=timeout,
             )
             if result.returncode != 0:
-                logger.warning(f"Command {' '.join(cmd)} returned {result.returncode}")
+                logger.warning("Command %s returned %d", ' '.join(cmd), result.returncode)
         except subprocess.TimeoutExpired:
-            logger.error(f"LaTeX timed out after {timeout}s: {' '.join(cmd)}")
+            logger.error("LaTeX timed out after %ds: %s", timeout, ' '.join(cmd))
             success = False
         except FileNotFoundError:
             logger.error(f"Command not found: {cmd[0]}. Install TeX Live or MiKTeX.")
@@ -279,9 +286,9 @@ def compile_latex(
         output_pdf.parent.mkdir(parents=True, exist_ok=True)
         try:
             shutil.move(str(pdf_file), str(output_pdf))
-            logger.info(f"PDF saved to {output_pdf}")
+            logger.info("PDF saved to %s", output_pdf)
         except Exception as e:
-            logger.error(f"Failed to move PDF: {e}")
+            logger.error("Failed to move PDF: %s", e)
             success = False
 
     return success and (pdf_file.exists() or (output_pdf and Path(output_pdf).exists()))

@@ -221,7 +221,7 @@ class PeerReviewer:
                     msg_context = ref_response
 
                 if "I am done" in ref_response:
-                    logger.info(f"Review converged after {j + 1} reflections")
+                    logger.info("Review converged after %d reflections", j + 1)
                     break
 
         result = ReviewResult.from_json(review_json)
@@ -236,7 +236,7 @@ class PeerReviewer:
         """Run multiple reviews and aggregate via meta-review."""
         reviews = []
         for i in range(self.num_ensemble):
-            logger.info(f"Ensemble review {i + 1}/{self.num_ensemble}")
+            logger.info("Ensemble review %d/%d", i + 1, self.num_ensemble)
             review = self._single_review(text)
             if review.overall > 0:
                 reviews.append(review)
@@ -297,7 +297,7 @@ class PeerReviewer:
 
         # Decision by majority
         accept_votes = sum(1 for r in reviews if r.is_accept)
-        result.decision = "Accept" if accept_votes > len(reviews) / 2 else "Reject"
+        result.decision = "Accept" if accept_votes >= len(reviews) / 2 else "Reject"
 
         # Ethical concerns if any reviewer flagged
         result.ethical_concerns = any(r.ethical_concerns for r in reviews)

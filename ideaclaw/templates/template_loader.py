@@ -44,7 +44,7 @@ class TemplateLoader:
             logger.warning("template_registry.json not found at %s", registry_path)
             return
 
-        with open(registry_path) as f:
+        with open(registry_path, encoding="utf-8") as f:
             data = json.load(f)
 
         # Flatten tier→profile into a single profile→config map
@@ -53,7 +53,7 @@ class TemplateLoader:
                 continue
             if isinstance(profiles, dict):
                 for profile_id, config in profiles.items():
-                    config["_tier"] = tier_key
+                    config = {**config, "_tier": tier_key}  # defensive copy
                     self._registry[profile_id] = config
 
         logger.info("Loaded %d profile→template mappings", len(self._registry))
@@ -64,7 +64,7 @@ class TemplateLoader:
         if not forms_dir.exists():
             return
         for fp in forms_dir.glob("*.json"):
-            with open(fp) as f:
+            with open(fp, encoding="utf-8") as f:
                 self._review_forms[fp.stem] = json.load(f)
         logger.info("Loaded %d review forms", len(self._review_forms))
 
@@ -107,9 +107,9 @@ class TemplateLoader:
             if candidate.exists():
                 return candidate.read_text(encoding="utf-8")
 
-        # Fallback: try any .tex or .md in the directory
+        # Fallback: try any .tex or .md file in the directory (skip subdirs)
         for fp in sorted(tpl_path.iterdir()):
-            if fp.suffix in (".tex", ".md"):
+            if fp.is_file() and fp.suffix in (".tex", ".md"):
                 return fp.read_text(encoding="utf-8")
 
         return None
@@ -191,7 +191,7 @@ class TemplateLoader:
         if not prompt_path.exists():
             return None
 
-        with open(prompt_path) as f:
+        with open(prompt_path, encoding="utf-8") as f:
             return json.load(f)
 
     def list_profiles(self, tier: Optional[str] = None) -> List[str]:

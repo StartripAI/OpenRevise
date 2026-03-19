@@ -112,13 +112,13 @@ class SemanticScholarSearch:
             except urllib.error.HTTPError as e:
                 if e.code == 429:
                     wait = 2 ** (attempt + 1)
-                    logger.warning(f"Rate limited. Retrying in {wait}s...")
+                    logger.warning("Rate limited. Retrying in %ds...", wait)
                     time.sleep(wait)
                     continue
-                logger.error(f"Semantic Scholar API error {e.code}")
+                logger.error("Semantic Scholar API error %d", e.code)
                 return []
             except (urllib.error.URLError, TimeoutError, OSError) as e:
-                logger.error(f"Semantic Scholar connection error: {e}")
+                logger.error("Semantic Scholar connection error: %s", e)
                 if attempt < retries - 1:
                     time.sleep(1)
                     continue
@@ -129,7 +129,7 @@ class SemanticScholarSearch:
         """Parse Semantic Scholar API response into PaperResult objects."""
         results = []
         for item in data.get("data", []):
-            authors_list = item.get("authors", [])
+            authors_list = item.get("authors") or []
             author_names = ", ".join(a.get("name", "") for a in authors_list[:5])
             if len(authors_list) > 5:
                 author_names += " et al."
@@ -143,16 +143,16 @@ class SemanticScholarSearch:
 
             results.append(
                 PaperResult(
-                    title=item.get("title", ""),
+                    title=item.get("title") or "",
                     authors=author_names,
-                    venue=item.get("venue", "") or "",
-                    year=item.get("year", 0) or 0,
-                    abstract=item.get("abstract", "") or "",
-                    url=item.get("url", "") or "",
-                    doi=external_ids.get("DOI", ""),
-                    citation_count=item.get("citationCount", 0) or 0,
+                    venue=item.get("venue") or "",
+                    year=item.get("year") or 0,
+                    abstract=item.get("abstract") or "",
+                    url=item.get("url") or "",
+                    doi=external_ids.get("DOI") or "",
+                    citation_count=item.get("citationCount") or 0,
                     bibtex=bibtex,
-                    paper_id=item.get("paperId", ""),
+                    paper_id=item.get("paperId") or "",
                 )
             )
         return results
@@ -164,7 +164,7 @@ class OpenAlexSearch:
     BASE_URL = "https://api.openalex.org/works"
 
     def search(self, query: str, limit: int = 10) -> List[PaperResult]:
-        """Search OpenAlex for papers."""
+        """Search OpenAlex for papers with retry."""
         if not query:
             return []
 
@@ -176,14 +176,27 @@ class OpenAlexSearch:
         url = f"{self.BASE_URL}?{urllib.parse.urlencode(params)}"
         headers = {"Accept": "application/json", "User-Agent": "IdeaClaw/0.1 (mailto:research@startripai.com)"}
 
-        try:
-            req = urllib.request.Request(url, headers=headers)
-            with urllib.request.urlopen(req, timeout=30) as resp:
-                data = json.loads(resp.read().decode("utf-8"))
-            return self._parse_results(data)
-        except Exception as e:
-            logger.error(f"OpenAlex search error: {e}")
-            return []
+        for attempt in range(3):
+            try:
+                req = urllib.request.Request(url, headers=headers)
+                with urllib.request.urlopen(req, timeout=30) as resp:
+                    data = json.loads(resp.read().decode("utf-8"))
+                return self._parse_results(data)
+            except urllib.error.HTTPError as e:
+                if e.code == 429 and attempt < 2:
+                    wait = 2 ** (attempt + 1)
+                    logger.warning("OpenAlex rate limited. Retrying in %ds...", wait)
+                    time.sleep(wait)
+                    continue
+                logger.error("OpenAlex API error %d", e.code)
+                return []
+            except (urllib.error.URLError, TimeoutError, OSError) as e:
+                logger.error("OpenAlex connection error: %s", e)
+                if attempt < 2:
+                    time.sleep(1)
+                    continue
+                return []
+        return []
 
     def _parse_results(self, data: Dict) -> List[PaperResult]:
         """Parse OpenAlex API response."""

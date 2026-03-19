@@ -53,28 +53,28 @@ def load_paper(
             text = pymupdf4llm.to_markdown(str(pdf_path), pages=list(range(num_pages)))
 
         if len(text) >= min_size:
-            logger.debug(f"Extracted {len(text)} chars via pymupdf4llm")
+            logger.debug("Extracted %d chars via pymupdf4llm", len(text))
             return text
         raise ValueError("Text too short")
     except Exception as e:
-        logger.debug(f"pymupdf4llm failed: {e}")
+        logger.debug("pymupdf4llm failed: %s", e)
 
     # Try pymupdf (fitz)
     try:
         import pymupdf
 
-        doc = pymupdf.open(str(pdf_path))
-        pages = doc[:num_pages] if num_pages else doc
-        text = ""
-        for page in pages:
-            text += page.get_text()
+        with pymupdf.open(str(pdf_path)) as doc:
+            pages = doc[:num_pages] if num_pages else doc
+            text = ""
+            for page in pages:
+                text += page.get_text()
 
         if len(text) >= min_size:
-            logger.debug(f"Extracted {len(text)} chars via pymupdf")
+            logger.debug("Extracted %d chars via pymupdf", len(text))
             return text
         raise ValueError("Text too short")
     except Exception as e:
-        logger.debug(f"pymupdf failed: {e}")
+        logger.debug("pymupdf failed: %s", e)
 
     # Try pypdf (basic fallback)
     try:
@@ -85,13 +85,13 @@ def load_paper(
         text = "".join(page.extract_text() or "" for page in pages)
 
         if len(text) >= min_size:
-            logger.debug(f"Extracted {len(text)} chars via pypdf")
+            logger.debug("Extracted %d chars via pypdf", len(text))
             return text
         raise ValueError("Text too short")
     except ImportError:
         logger.error("No PDF library available. Install pymupdf4llm, pymupdf, or pypdf.")
     except Exception as e:
-        logger.error(f"pypdf failed: {e}")
+        logger.error("pypdf failed: %s", e)
 
     raise RuntimeError(
         f"Failed to extract text from {pdf_path}. "
