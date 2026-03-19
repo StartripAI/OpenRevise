@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IdeaClaw: Structured Autonomous Generation Engine</title>
+    <style>
+        :root {
+            --bg-body: #fafafa;
+            --bg-paper: #ffffff;
+            --text-main: #222222;
+            --text-muted: #555555;
+            --border-line: #dddddd;
+            --accent-link: #0056b3;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif, "Songti SC", "SimSun";
+            line-height: 1.6;
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .paper {
+            background: var(--bg-paper);
+            max-width: 800px;
+            width: 100%;
+            padding: 60px 80px;
+            border: 1px solid var(--border-line);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        @media (max-width: 768px) {
+            .paper {
+                padding: 30px 20px;
+            }
+        }
+
+        header {
+            text-align: center;
+            border-bottom: 2px solid var(--text-main);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        .abstract {
+            background: #f9f9f9;
+            border: 1px solid var(--border-line);
+            padding: 20px;
+            margin-bottom: 30px;
+            font-size: 14.5px;
+            text-align: justify;
+        }
+
+        .abstract strong {
+            font-family: sans-serif;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        section {
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            font-size: 20px;
+            border-bottom: 1px solid var(--border-line);
+            padding-bottom: 8px;
+            margin-bottom: 16px;
+            font-weight: bold;
+        }
+
+        p {
+            margin-bottom: 16px;
+            font-size: 15px;
+            text-align: justify;
+        }
+
+        ul, ol {
+            margin-bottom: 16px;
+            padding-left: 20px;
+            font-size: 15px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .metrics-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-size: 13.5px;
+        }
+
+        .metrics-table th, .metrics-table td {
+            border: 1px solid var(--border-line);
+            padding: 10px 12px;
+            text-align: left;
+        }
+
+        .metrics-table th {
+            background-color: #f5f5f5;
+            font-weight: 600;
+        }
+
+        .github-link {
+            display: inline-block;
+            margin-top: 10px;
+            font-family: monospace;
+            font-size: 14px;
+            color: var(--accent-link);
+            text-decoration: none;
+            border: 1px solid var(--accent-link);
+            padding: 8px 16px;
+            transition: all 0.2s;
+        }
+
+        .github-link:hover {
+            background: var(--accent-link);
+            color: #fff;
+        }
+
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border-line);
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="paper">
+        <header>
+            <h1>IdeaClaw</h1>
+            <div class="subtitle">Structured Autonomous Generation Engine for Academic and Industry Reports</div>
+        </header>
+
+        <div class="abstract">
+            <strong>Abstract</strong>
+            IdeaClaw是一套面向学术与高规格商业研究场景的基础设施框架。本项目致力于解决大型语言模型在长文推理时常见的“结构崩塌”、“逻辑遗漏”与“Token尾部截断”等灾难性问题。通过内置自愈编排管线（Self-Healing Architecture）与131种严格的学术及商业模板，IdeaClaw能够将初始核心假设（或摘要提示），稳定、全自动地泛化为具备完整结构、可验证依据且完全排版的文献级交付物。
+        </div>
+
+        <section>
+            <h2>1. 核心架构特性 (Core Features)</h2>
+            <ul>
+                <li><strong>模板驱动渲染机制：</strong>引擎内置131种专业结构体（涵盖各类咨询分析、尽职调查、学位论文格式）。支持原生整合各类后处理插件，如Mermaid逻辑图表生成与LaTeX级格式导出。</li>
+                <li><strong>Salacia 执行契约 (Contract-based Generation)：</strong>摒弃传统的黑盒Prompt工程，改用具体的执行契约（Execution Contract）约束生成过程，使大语言模型进入确定性的参数组合空间。</li>
+                <li><strong>长链路工作流协同：</strong>输入一次核心指令，后台系统自动执行逻辑大纲切分、交叉并行检索以及合成后处理，最大化降低人机对话开销。</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>2. 系统健壮性控制 (Self-Healing Control)</h2>
+            <p>由于生成超长文稿的内在不稳定性，系统构建了拦截纠错反馈回路，以提供等同于实验级别的容错能力（类似 ARC ）。</p>
+            <table class="metrics-table">
+                <thead>
+                    <tr>
+                        <th>容错维度</th>
+                        <th>技术实现方式</th>
+                        <th>解决的痛点</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>100% 结构完整度校验</td>
+                        <td>每次迭代通过正则捕捉和语义核对比对模板，强制校验必须覆盖所有的 Mandatory Headers。无漏写才可通行。</td>
+                        <td>大模型发散导致的章节遗漏与重名</td>
+                    </tr>
+                    <tr>
+                        <td>自动化防截断机制</td>
+                        <td>对生成的最终文本序列进行句法尾部解析。若非合规闭环标点，即捕获后台回叫 Trace 启动后续衔接。</td>
+                        <td>超长输出时的 Token 上限骤停 (熔断)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section>
+            <h2>3. 自动化实施路径 (Workflow)</h2>
+            <ol>
+                <li><strong>初始化：</strong>提供一句话研究目标或核心观点。</li>
+                <li><strong>MECE 拆解：</strong>系统基于 MECE 原则展开层级大纲。</li>
+                <li><strong>沙盒约束检索：</strong>依据大纲节点调用内部或开放知识库，获取依据以规避虚构幻觉。</li>
+                <li><strong>自查生成：</strong>文本合成流开启，遭遇遗漏断轴时触发内侧重训，保证最终格式合规。</li>
+                <li><strong>构建交付：</strong>封印入选定文档模板环境，输出图文互文的工业排版成品。</li>
+            </ol>
+        </section>
+
+        <section>
+            <h2>4. 仓库与获取 (Repository)</h2>
+            <p>该自动化框架代码已在 GitHub 全域开源，遵循标准开源许可。适用于研究人员极简构建高难度图文研报及算法论文初稿。</p>
+            <a href="https://github.com/StartripAI/IdeaClaw" target="_blank" class="github-link">git clone https://github.com/StartripAI/IdeaClaw.git</a>
+        </section>
+
+        <footer>
+            Prepared by the Engineering Team. For Document Revision and Auto-Research workflows.<br>
+            Version 1.0.0 | Open Source Allocation
+        </footer>
+    </div>
+
+</body>
+</html>
