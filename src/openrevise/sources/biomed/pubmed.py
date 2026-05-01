@@ -1,4 +1,7 @@
-"""PubMed client via NCBI E-utilities (esearch + esummary).
+"""PubMed client via NCBI E-utilities esearch.
+
+Returns a list of `{pmid: ...}` dicts. Pair with a downstream esummary/efetch
+call when richer metadata is needed; v0 only does ID retrieval.
 
 E-utilities docs: https://www.ncbi.nlm.nih.gov/books/NBK25500/
 No API key required for low-volume use; consider passing api_key for >3 req/sec.
