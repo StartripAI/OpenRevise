@@ -67,4 +67,10 @@ def default_router(
     router = SourceRouter()
     router.register("preprint", preprint_engine)
     router.register("biomed", biomed_dispatch)
+    # Compatibility alias: the legacy source_registry.yaml labels pubmed/PMC/europe_pmc
+    # entries as `source_type: literature`. Register the same biomed dispatch under
+    # `literature` so existing-registry consumers route correctly. Future cleanup:
+    # split scholar (openalex/crossref) from biomed (NCBI/EuropePMC) and update the
+    # registry to use `biomed` directly.
+    router.register("literature", biomed_dispatch)
     return router
