@@ -453,7 +453,7 @@ def main() -> int:
         action="store_true",
         help="Allow using an input DOCX that already contains tracked revisions (w:ins/w:del).",
     )
-    parser.add_argument("--author", default="Codex")
+    parser.add_argument("--author", default="OpenRevise")
     parser.add_argument(
         "--date",
         default=dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),

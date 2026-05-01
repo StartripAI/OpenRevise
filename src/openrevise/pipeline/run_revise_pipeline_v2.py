@@ -151,7 +151,7 @@ def _parse_args() -> argparse.Namespace:
         required=True,
         help="JSON spec containing generic revision patches and source footnote texts.",
     )
-    parser.add_argument("--author", default="Codex")
+    parser.add_argument("--author", default="OpenRevise")
     parser.add_argument(
         "--date",
         default=dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
@@ -182,6 +182,11 @@ def _parse_args() -> argparse.Namespace:
         type=Path,
         default=None,
         help="Optional extra copy destination for revised DOCX.",
+    )
+    parser.add_argument(
+        "--skip-label-value-check",
+        action="store_true",
+        help="Skip ITT/mITT label-value consistency gate (not recommended).",
     )
     return parser.parse_args()
 
@@ -234,6 +239,7 @@ def main() -> int:
 
     intake_copy = run_dir / "intake" / f"input_{run_id}.docx"
     source_report = run_dir / "reports" / f"source_gate_report_{run_id}.json"
+    label_value_report = run_dir / "reports" / f"label_value_consistency_{run_id}.json"
     run_context_file = run_dir / "reports" / f"run_context_{run_id}.json"
     revised_docx = run_dir / "revision" / f"revised_{run_id}.docx"
     revision_audit = run_dir / "revision" / f"revision_change_audit_{run_id}.csv"
@@ -249,7 +255,15 @@ def main() -> int:
         safe_copy2(args.input_docx, intake_copy)
         safe_copy2(args.patch_spec, patch_spec_copy)
 
-        for target in [source_report, run_context_file, revised_docx, revision_audit, q_source_map, claim_verdicts]:
+        for target in [
+            source_report,
+            label_value_report,
+            run_context_file,
+            revised_docx,
+            revision_audit,
+            q_source_map,
+            claim_verdicts,
+        ]:
             _must_not_exist(target)
 
         for target in [sync_manifest, deleted_manifest, artifact_manifest]:
@@ -318,52 +332,75 @@ def main() -> int:
             finished_status = "FAILED_GATE"
             finished_notes = "required source gate failed"
         else:
-            revise_cmd = [
-                runtime_python,
-                "-m",
-                "openrevise.revise.revise_docx",
-                "--input-docx",
-                str(intake_copy),
-                "--output-docx",
-                str(revised_docx),
-                "--audit-csv",
-                str(revision_audit),
-                "--patch-spec",
-                str(patch_spec_copy),
-                "--author",
-                args.author,
-                "--date",
-                args.date,
-                "--run-dir",
-                str(run_dir),
-                "--run-id",
-                run_id,
-            ]
-            if args.allow_incremental:
-                revise_cmd.append("--allow-incremental")
-            revise_rc = _run(revise_cmd)
-            if revise_rc != 0:
-                finished_status = "FAILED_REVISE"
-                finished_notes = f"revise_docx failed with code {revise_rc}"
-            else:
-                qmap_rc = _run(
+            label_rc = 0
+            if not args.skip_label_value_check:
+                label_rc = _run(
                     [
                         runtime_python,
                         "-m",
-                        "openrevise.artifacts.build_q_source_map",
-                        "--input-docx",
-                        str(revised_docx),
-                        "--output-csv",
-                        str(q_source_map),
+                        "openrevise.gates.check_label_value_consistency",
+                        "--patch-spec",
+                        str(patch_spec_copy),
+                        "--source-config",
+                        str(args.source_config),
+                        "--output-json",
+                        str(label_value_report),
                         "--run-dir",
                         str(run_dir),
                         "--run-id",
                         run_id,
                     ]
                 )
-                if qmap_rc != 0:
-                    finished_status = "FAILED_QMAP"
-                    finished_notes = f"build_q_source_map failed with code {qmap_rc}"
+            if label_rc != 0:
+                finished_status = "FAILED_LABEL_GATE"
+                finished_notes = f"label-value consistency gate failed with code {label_rc}"
+            else:
+                revise_cmd = [
+                    runtime_python,
+                    "-m",
+                    "openrevise.revise.revise_docx",
+                    "--input-docx",
+                    str(intake_copy),
+                    "--output-docx",
+                    str(revised_docx),
+                    "--audit-csv",
+                    str(revision_audit),
+                    "--patch-spec",
+                    str(patch_spec_copy),
+                    "--author",
+                    args.author,
+                    "--date",
+                    args.date,
+                    "--run-dir",
+                    str(run_dir),
+                    "--run-id",
+                    run_id,
+                ]
+                if args.allow_incremental:
+                    revise_cmd.append("--allow-incremental")
+                revise_rc = _run(revise_cmd)
+                if revise_rc != 0:
+                    finished_status = "FAILED_REVISE"
+                    finished_notes = f"revise_docx failed with code {revise_rc}"
+                else:
+                    qmap_rc = _run(
+                        [
+                            runtime_python,
+                            "-m",
+                            "openrevise.artifacts.build_q_source_map",
+                            "--input-docx",
+                            str(revised_docx),
+                            "--output-csv",
+                            str(q_source_map),
+                            "--run-dir",
+                            str(run_dir),
+                            "--run-id",
+                            run_id,
+                        ]
+                    )
+                    if qmap_rc != 0:
+                        finished_status = "FAILED_QMAP"
+                        finished_notes = f"build_q_source_map failed with code {qmap_rc}"
 
         now_iso = to_iso_z(utc_now())
 
@@ -463,6 +500,15 @@ def main() -> int:
             str(args.source_config),
             "HOT",
             "source_gate_report",
+        )
+        add_artifact(
+            "label_value_consistency_report",
+            label_value_report,
+            "gate",
+            "openrevise.gates.check_label_value_consistency",
+            str(patch_spec_copy),
+            "HOT",
+            "label_value_consistency_report",
         )
         add_artifact(
             "revised_docx",
