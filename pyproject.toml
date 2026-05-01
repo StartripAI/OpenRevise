@@ -1,0 +1,54 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "openrevise"
+version = "0.1.0.dev0"
+description = "Evidence-gated revision infrastructure for high-stakes documents"
+readme = "README.md"
+license = { text = "Apache-2.0" }
+requires-python = ">=3.11"
+authors = [{ name = "StartripAI" }]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "License :: OSI Approved :: Apache Software License",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+  "lxml>=4.9",
+  "PyYAML>=6.0",
+  "requests>=2.31",
+]
+
+[project.optional-dependencies]
+preprint-deepxiv = ["deepxiv-sdk>=0.1"]
+preprint-arxiv = ["sentence-transformers>=2.2", "feedparser>=6.0"]
+biomed = ["biopython>=1.83"]
+mcp = ["mcp>=0.9"]
+docx = ["python-docx>=1.1"]
+pdf = ["pypdf>=4.0", "pdfminer.six>=20231228"]
+xlsx = ["openpyxl>=3.1"]
+all = ["openrevise[preprint-deepxiv,preprint-arxiv,biomed,mcp,docx,pdf,xlsx]"]
+dev = ["pytest>=8.0", "pytest-cov>=4.1", "ruff>=0.5"]
+
+[project.scripts]
+openrevise = "openrevise.cli:main"
+openrevise-mcp = "openrevise.mcp.server:main"
+
+[project.urls]
+Homepage = "https://github.com/StartripAI/OpenRevise"
+Issues = "https://github.com/StartripAI/OpenRevise/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["openrevise*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q --strict-markers"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
