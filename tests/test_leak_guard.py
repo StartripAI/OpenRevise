@@ -5,12 +5,11 @@ import subprocess
 
 FORBIDDEN = re.compile(r"PANOVA|阿片|opioid use \(ITT\)|/Users/star/")
 
-# These two files necessarily contain the forbidden tokens because they
-# define the leak-guard pattern. Exclude them from the scan; they're
-# allow-listed by their exact paths.
+# This file necessarily contains the forbidden tokens because it
+# defines the leak-guard pattern. Exclude it from the scan; it's
+# allow-listed by its exact path.
 SELF_REFERENCE_FILES = frozenset({
     "tests/test_leak_guard.py",
-    ".github/workflows/leak-guard.yml",
 })
 
 
