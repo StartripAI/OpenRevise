@@ -46,8 +46,8 @@ _maybe_reexec_runtime_python()
 
 from pypdf import PdfReader
 
-from evidence_extractors import extract_local_source_text
-from run_artifact_utils import is_valid_run_id
+from openrevise.sources.evidence_extractors import extract_local_source_text
+from openrevise.artifacts.run_artifact_utils import is_valid_run_id
 
 
 @dataclass

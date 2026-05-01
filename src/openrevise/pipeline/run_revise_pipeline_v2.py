@@ -14,7 +14,7 @@ import sys
 from pathlib import Path
 from typing import Dict, List
 
-from run_artifact_utils import (
+from openrevise.artifacts.run_artifact_utils import (
     ArtifactRecord,
     DEFAULT_MARKER,
     RunContext,
@@ -28,7 +28,7 @@ from run_artifact_utils import (
     utc_now,
     write_tsv,
 )
-from update_run_index import upsert_run_record
+from openrevise.artifacts.update_run_index import upsert_run_record
 
 
 SYNC_FIELDS = [
@@ -192,7 +192,6 @@ def main() -> int:
 
     repo_root = Path(__file__).resolve().parents[1]
     runtime_python = _resolve_runtime_python(repo_root)
-    scripts_dir = Path(__file__).resolve().parent
     runs_root = repo_root / "runs"
     runs_root.mkdir(parents=True, exist_ok=True)
     (repo_root / "archive").mkdir(parents=True, exist_ok=True)
@@ -301,7 +300,8 @@ def main() -> int:
         source_check_rc = _run(
             [
                 runtime_python,
-                str(scripts_dir / "check_revise_sources.py"),
+                "-m",
+                "openrevise.gates.check_revise_sources",
                 "--config",
                 str(args.source_config),
                 "--output-json",
@@ -320,7 +320,8 @@ def main() -> int:
         else:
             revise_cmd = [
                 runtime_python,
-                str(scripts_dir / "revise_docx.py"),
+                "-m",
+                "openrevise.revise.revise_docx",
                 "--input-docx",
                 str(intake_copy),
                 "--output-docx",
@@ -348,7 +349,8 @@ def main() -> int:
                 qmap_rc = _run(
                     [
                         runtime_python,
-                        str(scripts_dir / "build_q_source_map.py"),
+                        "-m",
+                        "openrevise.artifacts.build_q_source_map",
                         "--input-docx",
                         str(revised_docx),
                         "--output-csv",
@@ -550,7 +552,8 @@ def main() -> int:
             hk_rc = _run(
                 [
                     runtime_python,
-                    str(scripts_dir / "housekeeping.py"),
+                    "-m",
+                    "openrevise.pipeline.housekeeping",
                     "--marker",
                     args.marker,
                     "--retention-policy",

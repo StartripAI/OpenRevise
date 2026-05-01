@@ -14,7 +14,7 @@ import os
 import subprocess
 import sys
 from pathlib import Path
-from run_artifact_utils import is_valid_run_id
+from openrevise.artifacts.run_artifact_utils import is_valid_run_id
 
 
 def _run(cmd: list[str]) -> None:
@@ -121,14 +121,10 @@ def main() -> int:
         args.source_report_json = args.source_report_json or (repo_root / "reports" / "source_gate_report.json")
         args.q_map_csv = args.q_map_csv or (repo_root / "reports" / "q_source_map.csv")
 
-    base = Path(__file__).resolve().parent
-    check_script = base / "check_revise_sources.py"
-    revise_script = base / "revise_docx.py"
-    qmap_script = base / "build_q_source_map.py"
-
     check_cmd = [
         runtime_python,
-        str(check_script),
+        "-m",
+        "openrevise.gates.check_revise_sources",
         "--config",
         str(args.source_config),
         "--output-json",
@@ -147,7 +143,8 @@ def main() -> int:
 
     revise_cmd = [
         runtime_python,
-        str(revise_script),
+        "-m",
+        "openrevise.revise.revise_docx",
         "--input-docx",
         str(args.input_docx),
         "--output-docx",
@@ -168,7 +165,8 @@ def main() -> int:
     _run(
         [
             runtime_python,
-            str(qmap_script),
+            "-m",
+            "openrevise.artifacts.build_q_source_map",
             "--input-docx",
             str(args.output_docx),
             "--output-csv",

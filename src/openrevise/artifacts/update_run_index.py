@@ -11,7 +11,7 @@ from contextlib import contextmanager
 from pathlib import Path
 from typing import Dict, List
 
-from run_artifact_utils import read_tsv, write_tsv
+from openrevise.artifacts.run_artifact_utils import read_tsv, write_tsv
 
 
 RUN_INDEX_FIELDS: List[str] = [

@@ -21,7 +21,7 @@ from pathlib import Path
 from typing import Dict, Iterable, List, Tuple
 import xml.etree.ElementTree as ET
 
-from run_artifact_utils import is_valid_run_id
+from openrevise.artifacts.run_artifact_utils import is_valid_run_id
 
 
 W_NS = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"

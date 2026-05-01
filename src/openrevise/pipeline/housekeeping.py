@@ -11,7 +11,7 @@ import tarfile
 from pathlib import Path
 from typing import Dict, List, Set
 
-from run_artifact_utils import (
+from openrevise.artifacts.run_artifact_utils import (
     DEFAULT_MARKER,
     PurgeRecord,
     is_valid_run_id,
@@ -22,7 +22,7 @@ from run_artifact_utils import (
     utc_now,
     write_tsv,
 )
-from update_run_index import upsert_run_record
+from openrevise.artifacts.update_run_index import upsert_run_record
 
 
 DELETED_FIELDS = ["marker", "run_id", "reason", "status_before", "status_after", "path", "deleted_at"]
