@@ -31,7 +31,7 @@ docx = ["python-docx>=1.1"]
 pdf = ["pypdf>=4.0", "pdfminer.six>=20231228"]
 xlsx = ["openpyxl>=3.1"]
 all = ["openrevise[preprint-deepxiv,preprint-arxiv,biomed,mcp,docx,pdf,xlsx]"]
-dev = ["pytest>=8.0", "pytest-cov>=4.1", "ruff>=0.5"]
+dev = ["pytest>=8.0", "pytest-cov>=4.1", "ruff>=0.5", "requests-mock>=1.11"]
 
 [project.scripts]
 openrevise = "openrevise.cli:main"
