@@ -1,11 +1,11 @@
-"""Native arXiv API client (http://export.arxiv.org/api/query). No paywall, no auth."""
+"""Native arXiv API client (https://export.arxiv.org/api/query). No paywall, no auth."""
 from __future__ import annotations
 
 from urllib.parse import urlencode
 
 from .router import BackendUnavailable
 
-ARXIV_ENDPOINT = "http://export.arxiv.org/api/query"
+ARXIV_ENDPOINT = "https://export.arxiv.org/api/query"
 
 
 def search(spec: dict) -> list:
