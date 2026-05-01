@@ -235,3 +235,24 @@ sources:
   alias_keywords:
   - sun yat-sen
   - sysu
+- source_id: arxiv
+  source_type: preprint
+  tier: B
+  country: INTL
+  institution_tier: ''
+  reliability_rule: preprint_unreviewed
+  alias_keywords: [arxiv]
+- source_id: medrxiv
+  source_type: preprint
+  tier: B
+  country: INTL
+  institution_tier: ''
+  reliability_rule: preprint_unreviewed
+  alias_keywords: [medrxiv]
+- source_id: biorxiv
+  source_type: preprint
+  tier: B
+  country: INTL
+  institution_tier: ''
+  reliability_rule: preprint_unreviewed
+  alias_keywords: [biorxiv]
