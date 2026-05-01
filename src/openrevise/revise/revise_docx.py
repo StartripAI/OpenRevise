@@ -486,8 +486,20 @@ def main() -> int:
 
     patches, source_texts = load_patch_spec(args.patch_spec)
 
-    document_root = load_xml_from_docx(args.input_docx, "word/document.xml")
-    footnotes_root = load_xml_from_docx(args.input_docx, "word/footnotes.xml")
+    try:
+        document_root = load_xml_from_docx(args.input_docx, "word/document.xml")
+    except KeyError:
+        print("Invalid DOCX: missing word/document.xml", file=sys.stderr)
+        return 1
+    try:
+        footnotes_root = load_xml_from_docx(args.input_docx, "word/footnotes.xml")
+    except KeyError:
+        print(
+            "Input DOCX is missing word/footnotes.xml; this tool requires a baseline DOCX "
+            "with footnotes support.",
+            file=sys.stderr,
+        )
+        return 1
 
     existing_ids = existing_footnote_ids(footnotes_root)
     existing_text_map = footnote_text_map(footnotes_root)
