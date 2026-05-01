@@ -11,7 +11,7 @@ from contextlib import contextmanager
 from pathlib import Path
 from typing import Dict, List
 
-from run_artifact_utils import read_tsv, write_tsv
+from openrevise.artifacts.run_artifact_utils import read_tsv, write_tsv
 
 
 RUN_INDEX_FIELDS: List[str] = [
@@ -85,7 +85,7 @@ def main() -> int:
     parser.add_argument(
         "--index",
         type=Path,
-        default=Path(__file__).resolve().parents[1] / "reports" / "run_index.tsv",
+        default=Path(__file__).resolve().parents[3] / "reports" / "run_index.tsv",
     )
     parser.add_argument("--marker", required=True)
     parser.add_argument("--run-id", required=True)

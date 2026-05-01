@@ -14,7 +14,7 @@ import zipfile
 import xml.etree.ElementTree as ET
 from pathlib import Path
 from typing import Dict, List, Tuple
-from run_artifact_utils import is_valid_run_id
+from openrevise.artifacts.run_artifact_utils import is_valid_run_id
 
 W = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}"
 QUESTION_PREFIX_RE = re.compile(

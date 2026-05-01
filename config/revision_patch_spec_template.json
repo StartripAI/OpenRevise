@@ -1,4 +1,9 @@
 {
+  "meta": {
+    "notes": [
+      "Demo: when replacement contains subgroup label tuples (e.g. ITT/mITT), pipeline label-value gate checks prefix/value binding before revise."
+    ]
+  },
   "footnote_sources": {
     "src_reg_notice": "Source: Regulatory authority notice URL ... verified on YYYY-MM-DD.",
     "src_journal": "Source: Journal paper citation ... verified on YYYY-MM-DD."

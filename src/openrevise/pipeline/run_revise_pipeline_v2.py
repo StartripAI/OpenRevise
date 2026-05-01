@@ -14,7 +14,7 @@ import sys
 from pathlib import Path
 from typing import Dict, List
 
-from run_artifact_utils import (
+from openrevise.artifacts.run_artifact_utils import (
     ArtifactRecord,
     DEFAULT_MARKER,
     RunContext,
@@ -28,7 +28,7 @@ from run_artifact_utils import (
     utc_now,
     write_tsv,
 )
-from update_run_index import upsert_run_record
+from openrevise.artifacts.update_run_index import upsert_run_record
 
 
 SYNC_FIELDS = [
@@ -131,7 +131,7 @@ def _append_sync_row(
 
 
 def _parse_args() -> argparse.Namespace:
-    repo_root = Path(__file__).resolve().parents[1]
+    repo_root = Path(__file__).resolve().parents[3]
     parser = argparse.ArgumentParser(description="Run revise pipeline with run-scoped governance.")
     parser.add_argument("--input-docx", required=True, type=Path)
     parser.add_argument("--run-id", type=str, default=None)
@@ -151,7 +151,7 @@ def _parse_args() -> argparse.Namespace:
         required=True,
         help="JSON spec containing generic revision patches and source footnote texts.",
     )
-    parser.add_argument("--author", default="Codex")
+    parser.add_argument("--author", default="OpenRevise")
     parser.add_argument(
         "--date",
         default=dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
@@ -183,6 +183,11 @@ def _parse_args() -> argparse.Namespace:
         default=None,
         help="Optional extra copy destination for revised DOCX.",
     )
+    parser.add_argument(
+        "--skip-label-value-check",
+        action="store_true",
+        help="Skip ITT/mITT label-value consistency gate (not recommended).",
+    )
     return parser.parse_args()
 
 
@@ -190,9 +195,8 @@ def main() -> int:
     args = _parse_args()
     ensure_non_empty_marker(args.marker)
 
-    repo_root = Path(__file__).resolve().parents[1]
+    repo_root = Path(__file__).resolve().parents[3]
     runtime_python = _resolve_runtime_python(repo_root)
-    scripts_dir = Path(__file__).resolve().parent
     runs_root = repo_root / "runs"
     runs_root.mkdir(parents=True, exist_ok=True)
     (repo_root / "archive").mkdir(parents=True, exist_ok=True)
@@ -235,6 +239,7 @@ def main() -> int:
 
     intake_copy = run_dir / "intake" / f"input_{run_id}.docx"
     source_report = run_dir / "reports" / f"source_gate_report_{run_id}.json"
+    label_value_report = run_dir / "reports" / f"label_value_consistency_{run_id}.json"
     run_context_file = run_dir / "reports" / f"run_context_{run_id}.json"
     revised_docx = run_dir / "revision" / f"revised_{run_id}.docx"
     revision_audit = run_dir / "revision" / f"revision_change_audit_{run_id}.csv"
@@ -250,7 +255,15 @@ def main() -> int:
         safe_copy2(args.input_docx, intake_copy)
         safe_copy2(args.patch_spec, patch_spec_copy)
 
-        for target in [source_report, run_context_file, revised_docx, revision_audit, q_source_map, claim_verdicts]:
+        for target in [
+            source_report,
+            label_value_report,
+            run_context_file,
+            revised_docx,
+            revision_audit,
+            q_source_map,
+            claim_verdicts,
+        ]:
             _must_not_exist(target)
 
         for target in [sync_manifest, deleted_manifest, artifact_manifest]:
@@ -301,7 +314,8 @@ def main() -> int:
         source_check_rc = _run(
             [
                 runtime_python,
-                str(scripts_dir / "check_revise_sources.py"),
+                "-m",
+                "openrevise.gates.check_revise_sources",
                 "--config",
                 str(args.source_config),
                 "--output-json",
@@ -318,50 +332,75 @@ def main() -> int:
             finished_status = "FAILED_GATE"
             finished_notes = "required source gate failed"
         else:
-            revise_cmd = [
-                runtime_python,
-                str(scripts_dir / "revise_docx.py"),
-                "--input-docx",
-                str(intake_copy),
-                "--output-docx",
-                str(revised_docx),
-                "--audit-csv",
-                str(revision_audit),
-                "--patch-spec",
-                str(patch_spec_copy),
-                "--author",
-                args.author,
-                "--date",
-                args.date,
-                "--run-dir",
-                str(run_dir),
-                "--run-id",
-                run_id,
-            ]
-            if args.allow_incremental:
-                revise_cmd.append("--allow-incremental")
-            revise_rc = _run(revise_cmd)
-            if revise_rc != 0:
-                finished_status = "FAILED_REVISE"
-                finished_notes = f"revise_docx failed with code {revise_rc}"
-            else:
-                qmap_rc = _run(
+            label_rc = 0
+            if not args.skip_label_value_check:
+                label_rc = _run(
                     [
                         runtime_python,
-                        str(scripts_dir / "build_q_source_map.py"),
-                        "--input-docx",
-                        str(revised_docx),
-                        "--output-csv",
-                        str(q_source_map),
+                        "-m",
+                        "openrevise.gates.check_label_value_consistency",
+                        "--patch-spec",
+                        str(patch_spec_copy),
+                        "--source-config",
+                        str(args.source_config),
+                        "--output-json",
+                        str(label_value_report),
                         "--run-dir",
                         str(run_dir),
                         "--run-id",
                         run_id,
                     ]
                 )
-                if qmap_rc != 0:
-                    finished_status = "FAILED_QMAP"
-                    finished_notes = f"build_q_source_map failed with code {qmap_rc}"
+            if label_rc != 0:
+                finished_status = "FAILED_LABEL_GATE"
+                finished_notes = f"label-value consistency gate failed with code {label_rc}"
+            else:
+                revise_cmd = [
+                    runtime_python,
+                    "-m",
+                    "openrevise.revise.revise_docx",
+                    "--input-docx",
+                    str(intake_copy),
+                    "--output-docx",
+                    str(revised_docx),
+                    "--audit-csv",
+                    str(revision_audit),
+                    "--patch-spec",
+                    str(patch_spec_copy),
+                    "--author",
+                    args.author,
+                    "--date",
+                    args.date,
+                    "--run-dir",
+                    str(run_dir),
+                    "--run-id",
+                    run_id,
+                ]
+                if args.allow_incremental:
+                    revise_cmd.append("--allow-incremental")
+                revise_rc = _run(revise_cmd)
+                if revise_rc != 0:
+                    finished_status = "FAILED_REVISE"
+                    finished_notes = f"revise_docx failed with code {revise_rc}"
+                else:
+                    qmap_rc = _run(
+                        [
+                            runtime_python,
+                            "-m",
+                            "openrevise.artifacts.build_q_source_map",
+                            "--input-docx",
+                            str(revised_docx),
+                            "--output-csv",
+                            str(q_source_map),
+                            "--run-dir",
+                            str(run_dir),
+                            "--run-id",
+                            run_id,
+                        ]
+                    )
+                    if qmap_rc != 0:
+                        finished_status = "FAILED_QMAP"
+                        finished_notes = f"build_q_source_map failed with code {qmap_rc}"
 
         now_iso = to_iso_z(utc_now())
 
@@ -430,7 +469,7 @@ def main() -> int:
             "input_docx_copy",
             intake_copy,
             "intake",
-            "run_revise_pipeline_v2.py",
+            "openrevise.pipeline.run_revise_pipeline_v2",
             str(args.input_docx),
             "HOT",
             "input",
@@ -439,7 +478,7 @@ def main() -> int:
             "patch_spec_copy",
             patch_spec_copy,
             "scope",
-            "run_revise_pipeline_v2.py",
+            "openrevise.pipeline.run_revise_pipeline_v2",
             str(args.patch_spec),
             "PERMANENT",
             "patch_spec",
@@ -448,7 +487,7 @@ def main() -> int:
             "run_context",
             run_context_file,
             "reports",
-            "run_revise_pipeline_v2.py",
+            "openrevise.pipeline.run_revise_pipeline_v2",
             "",
             "PERMANENT",
             "run_context",
@@ -457,16 +496,25 @@ def main() -> int:
             "source_gate_report",
             source_report,
             "gate",
-            "check_revise_sources.py",
+            "openrevise.gates.check_revise_sources",
             str(args.source_config),
             "HOT",
             "source_gate_report",
         )
         add_artifact(
+            "label_value_consistency_report",
+            label_value_report,
+            "gate",
+            "openrevise.gates.check_label_value_consistency",
+            str(patch_spec_copy),
+            "HOT",
+            "label_value_consistency_report",
+        )
+        add_artifact(
             "revised_docx",
             revised_docx,
             "revise",
-            "revise_docx.py",
+            "openrevise.revise.revise_docx",
             str(patch_spec_copy),
             "PERMANENT",
             "revised_docx",
@@ -475,7 +523,7 @@ def main() -> int:
             "revision_change_audit",
             revision_audit,
             "revise",
-            "revise_docx.py",
+            "openrevise.revise.revise_docx",
             str(revised_docx),
             "PERMANENT",
             "change_audit",
@@ -484,7 +532,7 @@ def main() -> int:
             "q_source_map",
             q_source_map,
             "reports",
-            "build_q_source_map.py",
+            "openrevise.artifacts.build_q_source_map",
             str(revised_docx),
             "PERMANENT",
             "q_source_map",
@@ -493,7 +541,7 @@ def main() -> int:
             "claim_verdicts",
             claim_verdicts,
             "verify",
-            "run_revise_pipeline_v2.py",
+            "openrevise.pipeline.run_revise_pipeline_v2",
             "",
             "HOT",
             "claim_verdicts",
@@ -550,7 +598,8 @@ def main() -> int:
             hk_rc = _run(
                 [
                     runtime_python,
-                    str(scripts_dir / "housekeeping.py"),
+                    "-m",
+                    "openrevise.pipeline.housekeeping",
                     "--marker",
                     args.marker,
                     "--retention-policy",

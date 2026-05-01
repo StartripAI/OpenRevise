@@ -11,7 +11,7 @@ import tarfile
 from pathlib import Path
 from typing import Dict, List, Set
 
-from run_artifact_utils import (
+from openrevise.artifacts.run_artifact_utils import (
     DEFAULT_MARKER,
     PurgeRecord,
     is_valid_run_id,
@@ -22,7 +22,7 @@ from run_artifact_utils import (
     utc_now,
     write_tsv,
 )
-from update_run_index import upsert_run_record
+from openrevise.artifacts.update_run_index import upsert_run_record
 
 
 DELETED_FIELDS = ["marker", "run_id", "reason", "status_before", "status_after", "path", "deleted_at"]
@@ -102,8 +102,8 @@ def _purge_non_key_dirs(run_dir: Path, dry_run: bool) -> List[Path]:
     return removed
 
 
-def main() -> int:
-    repo_root = Path(__file__).resolve().parents[1]
+def main(argv: List[str] | None = None) -> int:
+    repo_root = Path(__file__).resolve().parents[3]
     parser = argparse.ArgumentParser(description="Retention housekeeping for revise run artifacts.")
     parser.add_argument("--runs-root", type=Path, default=repo_root / "runs")
     parser.add_argument("--archive-dir", type=Path, default=repo_root / "archive")
@@ -115,7 +115,7 @@ def main() -> int:
     parser.add_argument("--run-id", default=None)
     parser.add_argument("--approved-by", default="housekeeping.py")
     parser.add_argument("--dry-run", action="store_true")
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
     if args.run_id is not None and not is_valid_run_id(args.run_id):
         print(f"Invalid --run-id: {args.run_id}")
@@ -161,17 +161,18 @@ def main() -> int:
                 )
                 if not args.dry_run:
                     shutil.rmtree(run_dir)
-                upsert_run_record(
-                    run_index,
-                    {
-                        "marker": args.marker,
-                        "run_id": run_id,
-                        "status": "COLD_ARCHIVED",
-                        "archive_path": str(archive_path),
-                        "notes": f"migrated to archive at {now_iso}",
-                        "retention_policy": args.retention_policy,
-                    },
-                )
+                if not args.dry_run:
+                    upsert_run_record(
+                        run_index,
+                        {
+                            "marker": args.marker,
+                            "run_id": run_id,
+                            "status": "COLD_ARCHIVED",
+                            "archive_path": str(archive_path),
+                            "notes": f"migrated to archive at {now_iso}",
+                            "retention_policy": args.retention_policy,
+                        },
+                    )
             continue
 
         if age_days > args.cold_days:
@@ -227,7 +228,7 @@ def main() -> int:
                 if not args.dry_run:
                     archive_path.unlink()
 
-            if run_has_purge:
+            if run_has_purge and not args.dry_run:
                 upsert_run_record(
                     run_index,
                     {

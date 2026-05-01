@@ -69,7 +69,7 @@ class ClaimResult:
 def _maybe_reexec_runtime_python() -> None:
     if os.environ.get("REVISE_NO_REEXEC") == "1":
         return
-    repo_root = Path(__file__).resolve().parents[1]
+    repo_root = Path(__file__).resolve().parents[3]
     override = os.environ.get("REVISE_RUNTIME_PYTHON", "").strip()
     preferred = Path(override) if override else (repo_root / ".venv311" / "bin" / "python")
     if not preferred.exists():

@@ -21,7 +21,7 @@ from pathlib import Path
 from typing import Dict, Iterable, List, Tuple
 import xml.etree.ElementTree as ET
 
-from run_artifact_utils import is_valid_run_id
+from openrevise.artifacts.run_artifact_utils import is_valid_run_id
 
 
 W_NS = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
@@ -453,7 +453,7 @@ def main() -> int:
         action="store_true",
         help="Allow using an input DOCX that already contains tracked revisions (w:ins/w:del).",
     )
-    parser.add_argument("--author", default="Codex")
+    parser.add_argument("--author", default="OpenRevise")
     parser.add_argument(
         "--date",
         default=dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
@@ -486,8 +486,20 @@ def main() -> int:
 
     patches, source_texts = load_patch_spec(args.patch_spec)
 
-    document_root = load_xml_from_docx(args.input_docx, "word/document.xml")
-    footnotes_root = load_xml_from_docx(args.input_docx, "word/footnotes.xml")
+    try:
+        document_root = load_xml_from_docx(args.input_docx, "word/document.xml")
+    except KeyError:
+        print("Invalid DOCX: missing word/document.xml", file=sys.stderr)
+        return 1
+    try:
+        footnotes_root = load_xml_from_docx(args.input_docx, "word/footnotes.xml")
+    except KeyError:
+        print(
+            "Input DOCX is missing word/footnotes.xml; this tool requires a baseline DOCX "
+            "with footnotes support.",
+            file=sys.stderr,
+        )
+        return 1
 
     existing_ids = existing_footnote_ids(footnotes_root)
     existing_text_map = footnote_text_map(footnotes_root)

@@ -132,6 +132,25 @@ Core artifacts:
 Global index:
 - `reports/run_index.tsv`
 
+## Sources & backends
+
+OpenRevise's source router can be configured to retrieve evidence from multiple categories. Pipeline code dispatches by `source_type` to the registered backend, with optional dependencies allowing graceful degradation.
+
+- **Preprints (arXiv / medRxiv / bioRxiv):** retrieval is provided via [DeepXiv-SDK](https://github.com/DeepXiv/deepxiv_sdk) (optional, install with `pip install "openrevise[preprint-deepxiv]"`) or a built-in arXiv API client (`pip install "openrevise[preprint-arxiv]"`). If neither is installed, preprint retrieval is disabled and pipelines using non-preprint sources continue to work.
+- **Biomedical literature (PubMed / PMC / Europe PMC):** built-in clients using NCBI E-utilities and the EuropePMC REST API. No optional dependencies required beyond `requests` (a base dep).
+- **Scholarly indexes (Semantic Scholar / OpenAlex):** retained from the existing `ideaclaw.sources.scholar` module.
+- **Regulatory & guidelines (FDA / EMA / NCCN / ESMO / ASCO / CSCO):** generic HTTP fetchers driven by `config/source_registry.yaml`.
+- **Local files (PDF / DOCX / PPTX / images):** evidence extraction via `openrevise.sources.evidence_extractors`.
+
+## Quick install
+
+```bash
+pip install openrevise                          # core (no preprint search)
+pip install "openrevise[preprint-arxiv]"       # + native arXiv client
+pip install "openrevise[preprint-deepxiv]"     # + DeepXiv-SDK preprint backend
+pip install "openrevise[all]"                  # everything
+```
+
 ## Repository Structure
 | Path | Purpose |
 |---|---|

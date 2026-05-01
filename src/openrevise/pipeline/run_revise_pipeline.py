@@ -2,8 +2,9 @@
 """
 Top-level revise pipeline:
 1) source gate check
-2) tracked DOCX revision
-3) Q->source mapping export
+2) label-value consistency gate (ITT/mITT high-risk tuples)
+3) tracked DOCX revision
+4) Q->source mapping export
 """
 
 from __future__ import annotations
@@ -14,7 +15,7 @@ import os
 import subprocess
 import sys
 from pathlib import Path
-from run_artifact_utils import is_valid_run_id
+from openrevise.artifacts.run_artifact_utils import is_valid_run_id
 
 
 def _run(cmd: list[str]) -> None:
@@ -38,7 +39,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Run revise pipeline with hard source gate.")
     parser.add_argument("--input-docx", required=True, type=Path)
     parser.add_argument("--output-docx", type=Path, default=None)
-    parser.add_argument("--author", default="Codex")
+    parser.add_argument("--author", default="OpenRevise")
     parser.add_argument(
         "--date",
         default=dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
@@ -46,7 +47,7 @@ def main() -> int:
     parser.add_argument(
         "--source-config",
         type=Path,
-        default=Path(__file__).resolve().parents[1] / "config" / "revise_sources.json",
+        default=Path(__file__).resolve().parents[3] / "config" / "revise_sources.json",
     )
     parser.add_argument(
         "--patch-spec",
@@ -63,6 +64,12 @@ def main() -> int:
         "--q-map-csv",
         type=Path,
         default=None,
+    )
+    parser.add_argument(
+        "--label-check-report-json",
+        type=Path,
+        default=None,
+        help="Label-value consistency report JSON.",
     )
     parser.add_argument(
         "--run-dir",
@@ -97,6 +104,11 @@ def main() -> int:
         action="store_true",
         help="Allow revising from an input DOCX that already contains tracked changes.",
     )
+    parser.add_argument(
+        "--skip-label-value-check",
+        action="store_true",
+        help="Skip ITT/mITT label-value consistency gate (not recommended).",
+    )
     args = parser.parse_args()
 
     if args.run_id is not None and not is_valid_run_id(args.run_id):
@@ -107,7 +119,7 @@ def main() -> int:
     if args.run_dir is not None and args.run_id is None:
         parser.error("--run-id is required when --run-dir is provided")
 
-    repo_root = Path(__file__).resolve().parents[1]
+    repo_root = Path(__file__).resolve().parents[3]
     runtime_python = _resolve_runtime_python(repo_root)
     if args.run_dir is not None:
         args.output_docx = args.output_docx or (args.run_dir / "revision" / f"revised_{args.run_id}.docx")
@@ -115,20 +127,22 @@ def main() -> int:
             args.run_dir / "reports" / f"source_gate_report_{args.run_id}.json"
         )
         args.q_map_csv = args.q_map_csv or (args.run_dir / "reports" / f"q_source_map_{args.run_id}.csv")
+        args.label_check_report_json = args.label_check_report_json or (
+            args.run_dir / "reports" / f"label_value_consistency_{args.run_id}.json"
+        )
     else:
         if args.output_docx is None:
             parser.error("--output-docx is required unless --run-dir and --run-id are provided")
         args.source_report_json = args.source_report_json or (repo_root / "reports" / "source_gate_report.json")
         args.q_map_csv = args.q_map_csv or (repo_root / "reports" / "q_source_map.csv")
-
-    base = Path(__file__).resolve().parent
-    check_script = base / "check_revise_sources.py"
-    revise_script = base / "revise_docx.py"
-    qmap_script = base / "build_q_source_map.py"
+        args.label_check_report_json = args.label_check_report_json or (
+            repo_root / "reports" / "label_value_consistency_report.json"
+        )
 
     check_cmd = [
         runtime_python,
-        str(check_script),
+        "-m",
+        "openrevise.gates.check_revise_sources",
         "--config",
         str(args.source_config),
         "--output-json",
@@ -145,9 +159,29 @@ def main() -> int:
         print("Source gate failed. Revision aborted.")
         return check_proc.returncode
 
+    if not args.skip_label_value_check:
+        label_check_cmd = [
+            runtime_python,
+            "-m",
+            "openrevise.gates.check_label_value_consistency",
+            "--patch-spec",
+            str(args.patch_spec),
+            "--output-json",
+            str(args.label_check_report_json),
+        ]
+        if args.source_config is not None:
+            label_check_cmd += ["--source-config", str(args.source_config)]
+        if args.run_dir is not None:
+            label_check_cmd += ["--run-dir", str(args.run_dir), "--run-id", args.run_id]
+        label_check_proc = subprocess.run(label_check_cmd, check=False)
+        if label_check_proc.returncode != 0:
+            print("Label-value consistency gate failed. Revision aborted.")
+            return label_check_proc.returncode
+
     revise_cmd = [
         runtime_python,
-        str(revise_script),
+        "-m",
+        "openrevise.revise.revise_docx",
         "--input-docx",
         str(args.input_docx),
         "--output-docx",
@@ -168,7 +202,8 @@ def main() -> int:
     _run(
         [
             runtime_python,
-            str(qmap_script),
+            "-m",
+            "openrevise.artifacts.build_q_source_map",
             "--input-docx",
             str(args.output_docx),
             "--output-csv",
@@ -178,6 +213,8 @@ def main() -> int:
 
     print(f"Revision output: {args.output_docx}")
     print(f"Source gate report: {args.source_report_json}")
+    if not args.skip_label_value_check:
+        print(f"Label-value consistency report: {args.label_check_report_json}")
     print(f"Q-source map: {args.q_map_csv}")
     return 0
 
