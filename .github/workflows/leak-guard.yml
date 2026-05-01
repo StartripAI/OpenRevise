@@ -11,7 +11,10 @@ jobs:
       - name: Block sensitive tokens
         run: |
           set -e
-          if git ls-files | xargs grep -lE "(PANOVA|阿片|opioid use \(ITT\)|/Users/star/)" 2>/dev/null; then
+          # Skip the two files that define the leak-guard pattern itself.
+          if git ls-files \
+              | grep -vE '^(tests/test_leak_guard\.py|\.github/workflows/leak-guard\.yml)$' \
+              | xargs grep -lE "(PANOVA|阿片|opioid use \(ITT\)|/Users/star/)" 2>/dev/null; then
             echo "::error::leak-guard found sensitive tokens in tracked files"
             exit 1
           fi
