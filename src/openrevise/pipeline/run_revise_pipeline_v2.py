@@ -131,7 +131,7 @@ def _append_sync_row(
 
 
 def _parse_args() -> argparse.Namespace:
-    repo_root = Path(__file__).resolve().parents[1]
+    repo_root = Path(__file__).resolve().parents[3]
     parser = argparse.ArgumentParser(description="Run revise pipeline with run-scoped governance.")
     parser.add_argument("--input-docx", required=True, type=Path)
     parser.add_argument("--run-id", type=str, default=None)
@@ -190,7 +190,7 @@ def main() -> int:
     args = _parse_args()
     ensure_non_empty_marker(args.marker)
 
-    repo_root = Path(__file__).resolve().parents[1]
+    repo_root = Path(__file__).resolve().parents[3]
     runtime_python = _resolve_runtime_python(repo_root)
     runs_root = repo_root / "runs"
     runs_root.mkdir(parents=True, exist_ok=True)
@@ -432,7 +432,7 @@ def main() -> int:
             "input_docx_copy",
             intake_copy,
             "intake",
-            "run_revise_pipeline_v2.py",
+            "openrevise.pipeline.run_revise_pipeline_v2",
             str(args.input_docx),
             "HOT",
             "input",
@@ -441,7 +441,7 @@ def main() -> int:
             "patch_spec_copy",
             patch_spec_copy,
             "scope",
-            "run_revise_pipeline_v2.py",
+            "openrevise.pipeline.run_revise_pipeline_v2",
             str(args.patch_spec),
             "PERMANENT",
             "patch_spec",
@@ -450,7 +450,7 @@ def main() -> int:
             "run_context",
             run_context_file,
             "reports",
-            "run_revise_pipeline_v2.py",
+            "openrevise.pipeline.run_revise_pipeline_v2",
             "",
             "PERMANENT",
             "run_context",
@@ -459,7 +459,7 @@ def main() -> int:
             "source_gate_report",
             source_report,
             "gate",
-            "check_revise_sources.py",
+            "openrevise.gates.check_revise_sources",
             str(args.source_config),
             "HOT",
             "source_gate_report",
@@ -468,7 +468,7 @@ def main() -> int:
             "revised_docx",
             revised_docx,
             "revise",
-            "revise_docx.py",
+            "openrevise.revise.revise_docx",
             str(patch_spec_copy),
             "PERMANENT",
             "revised_docx",
@@ -477,7 +477,7 @@ def main() -> int:
             "revision_change_audit",
             revision_audit,
             "revise",
-            "revise_docx.py",
+            "openrevise.revise.revise_docx",
             str(revised_docx),
             "PERMANENT",
             "change_audit",
@@ -486,7 +486,7 @@ def main() -> int:
             "q_source_map",
             q_source_map,
             "reports",
-            "build_q_source_map.py",
+            "openrevise.artifacts.build_q_source_map",
             str(revised_docx),
             "PERMANENT",
             "q_source_map",
@@ -495,7 +495,7 @@ def main() -> int:
             "claim_verdicts",
             claim_verdicts,
             "verify",
-            "run_revise_pipeline_v2.py",
+            "openrevise.pipeline.run_revise_pipeline_v2",
             "",
             "HOT",
             "claim_verdicts",

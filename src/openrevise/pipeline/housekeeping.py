@@ -103,7 +103,7 @@ def _purge_non_key_dirs(run_dir: Path, dry_run: bool) -> List[Path]:
 
 
 def main() -> int:
-    repo_root = Path(__file__).resolve().parents[1]
+    repo_root = Path(__file__).resolve().parents[3]
     parser = argparse.ArgumentParser(description="Retention housekeeping for revise run artifacts.")
     parser.add_argument("--runs-root", type=Path, default=repo_root / "runs")
     parser.add_argument("--archive-dir", type=Path, default=repo_root / "archive")

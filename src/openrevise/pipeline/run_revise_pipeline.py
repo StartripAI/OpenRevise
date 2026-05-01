@@ -46,7 +46,7 @@ def main() -> int:
     parser.add_argument(
         "--source-config",
         type=Path,
-        default=Path(__file__).resolve().parents[1] / "config" / "revise_sources.json",
+        default=Path(__file__).resolve().parents[3] / "config" / "revise_sources.json",
     )
     parser.add_argument(
         "--patch-spec",
@@ -107,7 +107,7 @@ def main() -> int:
     if args.run_dir is not None and args.run_id is None:
         parser.error("--run-id is required when --run-dir is provided")
 
-    repo_root = Path(__file__).resolve().parents[1]
+    repo_root = Path(__file__).resolve().parents[3]
     runtime_python = _resolve_runtime_python(repo_root)
     if args.run_dir is not None:
         args.output_docx = args.output_docx or (args.run_dir / "revision" / f"revised_{args.run_id}.docx")
