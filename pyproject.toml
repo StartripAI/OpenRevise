@@ -33,9 +33,10 @@ xlsx = ["openpyxl>=3.1"]
 all = ["openrevise[preprint-deepxiv,preprint-arxiv,biomed,mcp,docx,pdf,xlsx]"]
 dev = ["pytest>=8.0", "pytest-cov>=4.1", "ruff>=0.5", "requests-mock>=1.11"]
 
-[project.scripts]
-openrevise = "openrevise.cli:main"
-openrevise-mcp = "openrevise.mcp.server:main"
+# [project.scripts] entries deliberately omitted in Phase 1.
+# The CLI (`openrevise`) and MCP server (`openrevise-mcp`) bins are added in
+# Phase 2 once `openrevise.cli` and `openrevise.mcp.server` modules exist.
+# Until then, invoke pipelines via `python -m openrevise.pipeline.run_revise_pipeline_v2 …`.
 
 [project.urls]
 Homepage = "https://github.com/StartripAI/OpenRevise"
